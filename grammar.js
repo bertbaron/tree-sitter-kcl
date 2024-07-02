@@ -532,6 +532,7 @@ module.exports = grammar({
     // Expressions
 
     expression: $ => prec(1, choice(
+      $.sequence_operation,
       $.comparison_operator,
       $.not_operator,
       $.boolean_operator,
@@ -717,6 +718,21 @@ module.exports = grammar({
       field('argument', $.primary_expression),
     )),
 
+    sequence_operation: $ => seq(choice(
+      $.in_operation,
+      $.not_in_operation,
+      $.concatenation,
+      $.subscript,
+      $.min,
+      $.max
+    )),
+    
+    in_operation: $ => prec.left(3, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'in', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary))),
+    not_in_operation: $ => prec.left(11, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'not', 'in', $.expression)),
+    concatenation: $ => prec.left(12, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), '+', $.expression)),
+    min: $ => prec.left(13, seq('min', '(', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), ')')),
+    max: $ => prec.left(14, seq('max', '(', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), ')')),
+    
     comparison_operator: $ => prec.left(2, seq(
       choice($.primary_expression,$.identifier,$.dotted_name),
       repeat1(seq(
