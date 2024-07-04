@@ -44,6 +44,93 @@ Index expression
     (integer)))
 
 ================================================================================
+Selector expression
+================================================================================
+
+schema Person:
+    name: str
+    age: int
+
+person = Person {
+    name = "Alice"
+    age = 18
+}
+name = person.name  # "Alice"
+age = person.age  # 18
+
+myDict = {
+    key = "value"
+}
+result = myDict.key # "value"
+
+--------------------------------------------------------------------------------
+
+(module
+  (schema_statement
+    (identifier)
+    (block
+      (assignment
+        (dotted_name
+          (identifier))
+        (basic_type))
+      (assignment
+        (dotted_name
+          (identifier))
+        (basic_type))))
+  (assignment
+    (dotted_name
+      (identifier))
+    (schema_expr
+      (identifier)
+      (dict_expr
+        (pair
+          (attribute
+            (identifier))
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))
+        (pair
+          (attribute
+            (identifier))
+          (integer)))))
+  (assignment
+    (dotted_name
+      (identifier))
+    (dotted_name
+      (identifier)
+      (identifier)))
+  (comment)
+  (assignment
+    (dotted_name
+      (identifier))
+    (dotted_name
+      (identifier)
+      (identifier)))
+  (comment)
+  (assignment
+    (dotted_name
+      (identifier))
+    (config_expr
+      (config_entries
+        (config_entry
+          (test
+            (dotted_name
+              (identifier)))
+          (test
+            (string
+              (string_start)
+              (string_content)
+              (string_end)))))))
+  (assignment
+    (dotted_name
+      (identifier))
+    (dotted_name
+      (identifier)
+      (identifier)))
+  (comment))
+
+================================================================================
 slice expression
 ================================================================================
 
