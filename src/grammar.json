@@ -1494,6 +1494,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "selector_expression"
+          },
+          {
+            "type": "SYMBOL",
             "name": "primary_expression"
           },
           {
@@ -1536,8 +1540,28 @@
         ]
       }
     },
+    "selector_expression": {
+      "type": "PREC_LEFT",
+      "value": 4,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "select_suffix"
+            }
+          }
+        ]
+      }
+    },
     "primary_expression": {
-      "type": "PREC",
+      "type": "PREC_LEFT",
       "value": 2,
       "content": {
         "type": "CHOICE",
@@ -2593,11 +2617,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "min"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "max"
+              "name": "call"
             }
           ]
         }
@@ -2738,90 +2758,6 @@
         ]
       }
     },
-    "min": {
-      "type": "PREC_LEFT",
-      "value": 13,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "min"
-          },
-          {
-            "type": "STRING",
-            "value": "("
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "list_comprehension"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "dictionary_comprehension"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "list"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "dictionary"
-              }
-            ]
-          },
-          {
-            "type": "STRING",
-            "value": ")"
-          }
-        ]
-      }
-    },
-    "max": {
-      "type": "PREC_LEFT",
-      "value": 14,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "max"
-          },
-          {
-            "type": "STRING",
-            "value": "("
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "list_comprehension"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "dictionary_comprehension"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "list"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "dictionary"
-              }
-            ]
-          },
-          {
-            "type": "STRING",
-            "value": ")"
-          }
-        ]
-      }
-    },
     "comparison_operator": {
       "type": "PREC_LEFT",
       "value": 2,
@@ -2842,6 +2778,10 @@
               {
                 "type": "SYMBOL",
                 "name": "dotted_name"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "selector_expression"
               }
             ]
           },
@@ -3134,6 +3074,41 @@
           }
         }
       ]
+    },
+    "select_suffix": {
+      "type": "PREC",
+      "value": 44,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "."
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "?."
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            ]
+          }
+        ]
+      }
     },
     "attribute": {
       "type": "PREC_RIGHT",

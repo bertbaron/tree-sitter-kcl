@@ -536,6 +536,7 @@ module.exports = grammar({
       $.comparison_operator,
       $.not_operator,
       $.boolean_operator,
+      $.selector_expression,
       $.primary_expression,
       $.as_expression,
       $.conditional_expression,
@@ -548,7 +549,12 @@ module.exports = grammar({
       field('alias', $.expression),
     )),
 
-    primary_expression: $ => prec(2, choice(
+    selector_expression: $ => prec.left(4, seq(
+      $.expression,
+      repeat1($.select_suffix)
+    )),
+
+    primary_expression: $ => prec.left(2, choice(
       $.binary_operator,
       $.identifier,
       $.string,
@@ -723,18 +729,15 @@ module.exports = grammar({
       $.not_in_operation,
       $.concatenation,
       $.subscript,
-      $.min,
-      $.max
+      $.call,
     )),
     
     in_operation: $ => prec.left(3, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'in', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary))),
     not_in_operation: $ => prec.left(11, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'not', 'in', $.expression)),
     concatenation: $ => prec.left(12, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), '+', $.expression)),
-    min: $ => prec.left(13, seq('min', '(', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), ')')),
-    max: $ => prec.left(14, seq('max', '(', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), ')')),
     
     comparison_operator: $ => prec.left(2, seq(
-      choice($.primary_expression,$.identifier,$.dotted_name),
+      choice($.primary_expression,$.identifier,$.dotted_name, $.selector_expression),
       repeat1(seq(
         field('operators',
           choice(
@@ -776,6 +779,11 @@ module.exports = grammar({
       ':',
       field('right', $.schema_expr),
     ),
+    
+    select_suffix: $ => prec(44, choice(
+      seq('.', $.identifier),
+      seq('?.', $.identifier)
+    )),
 
     attribute: $ => prec.right(11, seq(
       field('name', $.identifier),
