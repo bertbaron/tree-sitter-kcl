@@ -795,37 +795,6 @@
     }
   },
   {
-    "type": "concatenation",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "dictionary",
-          "named": true
-        },
-        {
-          "type": "dictionary_comprehension",
-          "named": true
-        },
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "list",
-          "named": true
-        },
-        {
-          "type": "list_comprehension",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "conditional_expression",
     "named": true,
     "fields": {},
@@ -2121,11 +2090,11 @@
       "required": true,
       "types": [
         {
-          "type": "call",
+          "type": "binary_operator",
           "named": true
         },
         {
-          "type": "concatenation",
+          "type": "call",
           "named": true
         },
         {
@@ -2735,11 +2704,11 @@
   },
   {
     "type": "float",
-    "named": false
+    "named": true
   },
   {
     "type": "float",
-    "named": true
+    "named": false
   },
   {
     "type": "for",

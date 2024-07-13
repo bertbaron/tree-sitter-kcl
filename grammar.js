@@ -712,12 +712,12 @@ module.exports = grammar({
       ];
 
       // @ts-ignore
-      return choice(...table.map(([fn, operator, precedence]) => fn(precedence, seq(
+      return prec(13, choice(...table.map(([fn, operator, precedence]) => fn(precedence, seq(
         field('left', $.primary_expression),
         // @ts-ignore
         field('operator', operator),
         field('right', $.primary_expression),
-      ))));
+      )))));
     },
 
     unary_operator: $ => prec(PREC.unary, seq(
@@ -725,18 +725,17 @@ module.exports = grammar({
       field('argument', $.primary_expression),
     )),
 
-    sequence_operation: $ => prec(23, seq(choice(
+    sequence_operation: $ => seq(choice(
       $.in_operation,
       $.not_in_operation,
-      $.concatenation,
+      $.binary_operator,
       $.subscript,
       $.call,
-    ))),
+    )),
     
     in_operation: $ => prec.left(3, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'in', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary))),
     not_in_operation: $ => prec.left(11, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'not', 'in', $.expression)),
-    concatenation: $ => prec.left(12, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), '+', $.expression)),
-    
+
     comparison_operator: $ => prec.left(2, seq(
       choice($.primary_expression,$.identifier,$.dotted_name, $.selector_expression),
       repeat1(seq(
