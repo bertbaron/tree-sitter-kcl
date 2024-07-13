@@ -1616,6 +1616,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "select_suffix"
+          },
+          {
+            "type": "SYMBOL",
             "name": "call"
           },
           {
@@ -2129,7 +2133,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "expression"
+          "name": "test"
         }
       ]
     },
@@ -2594,34 +2598,38 @@
       }
     },
     "sequence_operation": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "in_operation"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "not_in_operation"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "concatenation"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "subscript"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "call"
-            }
-          ]
-        }
-      ]
+      "type": "PREC",
+      "value": 23,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "in_operation"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "not_in_operation"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "concatenation"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "subscript"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "call"
+              }
+            ]
+          }
+        ]
+      }
     },
     "in_operation": {
       "type": "PREC_LEFT",

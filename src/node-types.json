@@ -224,6 +224,10 @@
         "named": true
       },
       {
+        "type": "select_suffix",
+        "named": true
+      },
+      {
         "type": "string",
         "named": true
       },

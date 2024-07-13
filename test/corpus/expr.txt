@@ -36,12 +36,13 @@ Index expression
 --------------------------------------------------------------------------------
 
 (module
-  (subscript
-    (string
-      (string_start)
-      (string_content)
-      (string_end))
-    (integer)))
+  (sequence_operation
+    (subscript
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (integer))))
 
 ================================================================================
 slice expression
@@ -52,14 +53,15 @@ slice expression
 --------------------------------------------------------------------------------
 
 (module
-  (subscript
-    (string
-      (string_start)
-      (string_content)
-      (string_end))
-    (slice
-      (integer)
-      (integer))))
+  (sequence_operation
+    (subscript
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (slice
+        (integer)
+        (integer)))))
 
 ================================================================================
 conditional expression
@@ -88,19 +90,20 @@ print("hello world", end="")
 --------------------------------------------------------------------------------
 
 (module
-  (call
-    (attribute
-      (identifier))
-    (argument_list
-      (string
-        (string_start)
-        (string_content)
-        (string_end))
-      (keyword_argument
-        (identifier)
+  (sequence_operation
+    (call
+      (attribute
+        (identifier))
+      (argument_list
         (string
           (string_start)
-          (string_end))))))
+          (string_content)
+          (string_end))
+        (keyword_argument
+          (identifier)
+          (string
+            (string_start)
+            (string_end)))))))
 
 ================================================================================
 Comprehensions
@@ -119,11 +122,12 @@ Comprehensions
             (identifier)))
         (for_in_clause
           (identifier)
-          (call
-            (attribute
-              (identifier))
-            (argument_list
-              (integer))))))
+          (sequence_operation
+            (call
+              (attribute
+                (identifier))
+              (argument_list
+                (integer)))))))
 
 ================================================================================
 selector expression
@@ -334,13 +338,14 @@ name3 = data["name"] or "name3_value"
         (dotted_name
           (identifier))
         (boolean_operator
+        (sequence_operation
           (subscript
             (attribute
              (identifier))
             (string
               (string_start)
               (string_content)
-              (string_end)))
+              (string_end))))
           (string
             (string_start)
             (string_content)
@@ -364,32 +369,6 @@ paren expression
           (identifier))))
     (attribute
       (identifier))))
-
-================================================================================
-Expression with 'in' operator
-================================================================================
-
-["gg"] in ["gg","eggs"]
-
---------------------------------------------------------------------------------
-
-(module
-  (sequence_operation
-    (in_operation
-      (list
-        (string
-          (string_start)
-          (string_content)
-          (string_end)))
-      (list
-        (string
-          (string_start)
-          (string_content)
-          (string_end))
-        (string
-          (string_start)
-          (string_content)
-          (string_end))))))
 
 ================================================================================
 boolean expression with 'and' operator
@@ -487,6 +466,156 @@ g = lambda x: str, y: int -> int {
             (identifier))
           (attribute
             (identifier)))))))
+
+================================================================================
+Sequence operations
+================================================================================
+
+["gg"] in ["gg","eggs"]
+["ab"] not in ["gg","eggs"]
+["kus"] + ["io","nstack"]
+["k", "c", "l"][0]
+["k", "c", "l"][0:2]
+["kub", "er", "ne", "tes"][0:3:2]
+min(["gg","eggs"])
+max(["gg","eggs"])
+
+--------------------------------------------------------------------------------
+
+(module
+  (sequence_operation
+    (in_operation
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))))
+  (sequence_operation
+    (not_in_operation
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))))
+  (sequence_operation
+    (concatenation
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))))
+  (sequence_operation
+    (subscript
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (integer)))
+  (sequence_operation
+    (subscript
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (slice
+        (integer)
+        (integer))))
+  (sequence_operation
+    (subscript
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (slice
+        (integer)
+        (integer)
+        (integer))))
+  (sequence_operation
+    (call
+      (attribute
+        (identifier))
+      (argument_list
+        (list
+          (string
+            (string_start)
+            (string_content)
+            (string_end))
+          (string
+            (string_start)
+            (string_content)
+            (string_end))))))
+  (sequence_operation
+    (call
+      (attribute
+        (identifier))
+      (argument_list
+        (list
+          (string
+            (string_start)
+            (string_content)
+            (string_end))
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))))))
 
 ================================================================================
 Comparison operators

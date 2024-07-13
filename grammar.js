@@ -567,6 +567,7 @@ module.exports = grammar({
       $.unary_operator,
       $.attribute,
       $.subscript,
+      $.select_suffix,
       $.call,
       $.list,
       $.list_comprehension,
@@ -724,13 +725,13 @@ module.exports = grammar({
       field('argument', $.primary_expression),
     )),
 
-    sequence_operation: $ => seq(choice(
+    sequence_operation: $ => prec(23, seq(choice(
       $.in_operation,
       $.not_in_operation,
       $.concatenation,
       $.subscript,
       $.call,
-    )),
+    ))),
     
     in_operation: $ => prec.left(3, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'in', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary))),
     not_in_operation: $ => prec.left(11, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'not', 'in', $.expression)),
