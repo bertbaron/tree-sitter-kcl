@@ -106,9 +106,11 @@ schema Config:
               (quant_target
                 (identifier))
               (comparison_operator
-                (dotted_name
-                  (identifier)
-                  (identifier))
+                (selector_expression
+                  (attribute
+                    (identifier))
+                  (select_suffix
+                    (identifier)))
                 (string
                   (string_start)
                   (string_content)
@@ -123,9 +125,11 @@ schema Config:
             (quant_target
               (identifier))
             (comparison_operator
-              (dotted_name
-                (identifier)
-                (identifier))
+              (selector_expression
+                (attribute
+                  (identifier))
+                (select_suffix
+                  (identifier)))
               (list
                 (string
                   (string_start)

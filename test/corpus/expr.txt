@@ -36,12 +36,12 @@ Index expression
 --------------------------------------------------------------------------------
 
 (module
-  (subscript
-    (string
-      (string_start)
-      (string_content)
-      (string_end))
-    (integer)))
+    (subscript
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (integer)))
 
 ================================================================================
 slice expression
@@ -52,14 +52,14 @@ slice expression
 --------------------------------------------------------------------------------
 
 (module
-  (subscript
-    (string
-      (string_start)
-      (string_content)
-      (string_end))
-    (slice
-      (integer)
-      (integer))))
+    (subscript
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (slice
+        (integer)
+        (integer))))
 
 ================================================================================
 conditional expression
@@ -88,19 +88,19 @@ print("hello world", end="")
 --------------------------------------------------------------------------------
 
 (module
-  (call
-    (attribute
-      (identifier))
-    (argument_list
-      (string
-        (string_start)
-        (string_content)
-        (string_end))
-      (keyword_argument
-        (identifier)
+    (call
+      (attribute
+        (identifier))
+      (argument_list
         (string
           (string_start)
-          (string_end))))))
+          (string_content)
+          (string_end))
+        (keyword_argument
+          (identifier)
+          (string
+            (string_start)
+            (string_end))))))
 
 ================================================================================
 Comprehensions
@@ -119,11 +119,11 @@ Comprehensions
             (identifier)))
         (for_in_clause
           (identifier)
-          (call
-            (attribute
-              (identifier))
-            (argument_list
-              (integer))))))
+            (call
+              (attribute
+                (identifier))
+              (argument_list
+                (integer))))))
 
 ================================================================================
 selector expression
@@ -149,9 +149,11 @@ result = myDict.key
       (assignment
         (dotted_name
           (identifier))
-        (dotted_name
-          (identifier)
-          (identifier))))
+        (selector_expression
+          (attribute
+            (identifier))
+          (select_suffix
+            (identifier)))))
 
 ================================================================================
 selector expression with ? operator
@@ -226,9 +228,11 @@ name1 = person.name
       (assignment
         (dotted_name
           (identifier))
-        (dotted_name
-          (identifier)
-          (identifier))))
+        (selector_expression
+          (attribute
+            (identifier))
+          (select_suffix
+            (identifier)))))
 
 ================================================================================
 optional attribute expression
@@ -457,6 +461,150 @@ g = lambda x: str, y: int -> int {
             (identifier))
           (attribute
             (identifier)))))))
+
+================================================================================
+Sequence operations
+================================================================================
+
+["gg"] in ["gg","eggs"]
+["ab"] not in ["gg","eggs"]
+["kus"] + ["io","nstack"]
+["k", "c", "l"][0]
+["k", "c", "l"][0:2]
+["kub", "er", "ne", "tes"][0:3:2]
+min(["gg","eggs"])
+max(["gg","eggs"])
+
+--------------------------------------------------------------------------------
+
+(module
+  (sequence_operation
+    (in_operation
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))))
+  (sequence_operation
+    (not_in_operation
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))))
+  (binary_operator
+    (list
+      (string
+        (string_start)
+        (string_content)
+        (string_end)))
+    (list
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))))
+  (subscript
+    (list
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end)))
+    (integer))
+  (subscript
+    (list
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end)))
+    (slice
+      (integer)
+      (integer)))
+  (subscript
+    (list
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end)))
+    (slice
+      (integer)
+      (integer)
+      (integer)))
+  (call
+    (attribute
+      (identifier))
+    (argument_list
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))))
+  (call
+    (attribute
+      (identifier))
+    (argument_list
+      (list
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end))))))
 
 ================================================================================
 Comparison operators
@@ -819,9 +967,11 @@ schema Config:
           (quant_target
             (identifier))
           (comparison_operator
-            (dotted_name
-              (identifier)
-              (identifier))
+            (selector_expression
+              (attribute
+                (identifier))
+              (select_suffix
+                (identifier)))
             (list
               (string
                 (string_start)

@@ -532,9 +532,11 @@ module.exports = grammar({
     // Expressions
 
     expression: $ => prec(1, choice(
+      $.sequence_operation,
       $.comparison_operator,
       $.not_operator,
       $.boolean_operator,
+      $.selector_expression,
       $.primary_expression,
       $.as_expression,
       $.conditional_expression,
@@ -547,7 +549,12 @@ module.exports = grammar({
       field('alias', $.expression),
     )),
 
-    primary_expression: $ => prec(2, choice(
+    selector_expression: $ => prec.left(4, seq(
+      $.expression,
+      repeat1($.select_suffix)
+    )),
+
+    primary_expression: $ => prec.left(2, choice(
       $.binary_operator,
       $.identifier,
       $.string,
@@ -560,6 +567,7 @@ module.exports = grammar({
       $.unary_operator,
       $.attribute,
       $.subscript,
+      $.select_suffix,
       $.call,
       $.list,
       $.list_comprehension,
@@ -704,12 +712,12 @@ module.exports = grammar({
       ];
 
       // @ts-ignore
-      return choice(...table.map(([fn, operator, precedence]) => fn(precedence, seq(
+      return prec(13, choice(...table.map(([fn, operator, precedence]) => fn(precedence, seq(
         field('left', $.primary_expression),
         // @ts-ignore
         field('operator', operator),
         field('right', $.primary_expression),
-      ))));
+      )))));
     },
 
     unary_operator: $ => prec(PREC.unary, seq(
@@ -717,8 +725,19 @@ module.exports = grammar({
       field('argument', $.primary_expression),
     )),
 
+    sequence_operation: $ => seq(choice(
+      $.in_operation,
+      $.not_in_operation,
+      $.binary_operator,
+      $.subscript,
+      $.call,
+    )),
+    
+    in_operation: $ => prec.left(3, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'in', choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary))),
+    not_in_operation: $ => prec.left(11, seq(choice($.list_comprehension, $.dictionary_comprehension, $.list, $.dictionary), 'not', 'in', $.expression)),
+
     comparison_operator: $ => prec.left(2, seq(
-      choice($.primary_expression,$.identifier,$.dotted_name),
+      choice($.primary_expression,$.identifier,$.dotted_name, $.selector_expression),
       repeat1(seq(
         field('operators',
           choice(
@@ -760,6 +779,11 @@ module.exports = grammar({
       ':',
       field('right', $.schema_expr),
     ),
+    
+    select_suffix: $ => prec(44, choice(
+      seq('.', $.identifier),
+      seq('?.', $.identifier)
+    )),
 
     attribute: $ => prec.right(11, seq(
       field('name', $.identifier),
