@@ -228,6 +228,10 @@
         "named": true
       },
       {
+        "type": "selector_expression",
+        "named": true
+      },
+      {
         "type": "string",
         "named": true
       },
@@ -785,10 +789,6 @@
         },
         {
           "type": "primary_expression",
-          "named": true
-        },
-        {
-          "type": "selector_expression",
           "named": true
         }
       ]
@@ -1947,7 +1947,7 @@
     },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "argument_list",

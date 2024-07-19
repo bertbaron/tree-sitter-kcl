@@ -583,6 +583,7 @@ module.exports = grammar({
       $.null_coalesce,
       $.string_literal_expr,
       $.config_expr,
+      $.selector_expression
     )),
 
     paren_expression: $ => seq(
@@ -759,7 +760,7 @@ module.exports = grammar({
     assignment: $ => seq(
       field('left', $.dotted_name),
       choice(
-        seq('=', field('right', choice($.dotted_name,$.expression,))),
+        seq('=', field('right', choice($.dotted_name,$.expression, $.selector_expression))),
         seq(':', field('type', $.type), '=', field('right', $.expression)),
         alias(seq(':',field('type', $.type)),'null_assignment'),
       ),

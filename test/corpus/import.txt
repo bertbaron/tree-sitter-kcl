@@ -59,3 +59,37 @@ import ..local.api as local
         (identifier)
         (identifier))
       (identifier))))
+
+================================================================================
+import statements with multiple files
+================================================================================
+
+import pkg1
+a = pkg1.foo + pkg1.bar + pkg1.baz
+
+--------------------------------------------------------------------------------
+
+(module
+  (import_statement
+    (dotted_name
+      (identifier)))
+  (assignment
+    (dotted_name
+      (identifier))
+    (selector_expression
+      (binary_operator
+        (selector_expression
+          (binary_operator
+            (selector_expression
+              (attribute
+                (identifier))
+              (select_suffix
+                (identifier)))
+            (attribute
+              (identifier)))
+          (select_suffix
+            (identifier)))
+        (attribute
+          (identifier)))
+      (select_suffix
+        (identifier)))))
