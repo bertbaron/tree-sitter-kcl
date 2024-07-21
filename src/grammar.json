@@ -422,32 +422,15 @@
               "type": "SEQ",
               "members": [
                 {
+                  "type": "STRING",
+                  "value": "("
+                },
+                {
                   "type": "CHOICE",
                   "members": [
                     {
-                      "type": "SEQ",
-                      "members": [
-                        {
-                          "type": "STRING",
-                          "value": "("
-                        },
-                        {
-                          "type": "CHOICE",
-                          "members": [
-                            {
-                              "type": "SYMBOL",
-                              "name": "argument_list"
-                            },
-                            {
-                              "type": "BLANK"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "STRING",
-                          "value": ")"
-                        }
-                      ]
+                      "type": "SYMBOL",
+                      "name": "argument_list"
                     },
                     {
                       "type": "BLANK"
@@ -455,8 +438,8 @@
                   ]
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "dict_expr"
+                  "type": "STRING",
+                  "value": ")"
                 }
               ]
             },
@@ -464,6 +447,10 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "dict_expr"
         }
       ]
     },
@@ -1678,6 +1665,10 @@
           {
             "type": "SYMBOL",
             "name": "optional_item"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "optional_attribute_declaration"
           },
           {
             "type": "SYMBOL",
@@ -3209,6 +3200,35 @@
             "content": {
               "type": "SYMBOL",
               "name": "identifier"
+            }
+          }
+        ]
+      }
+    },
+    "optional_attribute_declaration": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "attribute",
+            "content": {
+              "type": "SYMBOL",
+              "name": "identifier"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "?:"
+          },
+          {
+            "type": "FIELD",
+            "name": "type",
+            "content": {
+              "type": "SYMBOL",
+              "name": "type"
             }
           }
         ]

@@ -580,6 +580,7 @@ module.exports = grammar({
       $.braces_expression,
       $.optional_attribute,
       $.optional_item,
+      $.optional_attribute_declaration,
       $.null_coalesce,
       $.string_literal_expr,
       $.config_expr,
@@ -801,6 +802,12 @@ module.exports = grammar({
       field('object', $.primary_expression),
       '?.',
       field('attribute', $.identifier),
+    )),
+
+    optional_attribute_declaration: $ => prec(2, seq(
+      field('attribute', $.identifier),
+      '?:',
+      field('type', $.type),
     )),
 
     optional_item: $ => prec(PREC.call, seq(

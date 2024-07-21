@@ -321,3 +321,97 @@ config = Config {
             (string_start)
             (string_content)
             (string_end)))))))
+
+
+================================================================================
+Type Guards
+================================================================================
+
+schema Data1:
+    id?: int
+
+schema Data2:
+    name?: str
+
+data: Data1 | Data2 = Data1 {}
+
+if typeof(data) == "Data1":
+    data1 = data as Data1
+elif typeof(data) == "Data2":
+    data2 = data as Data2
+
+--------------------------------------------------------------------------------
+
+(module
+    (schema_statement
+    (identifier)
+    (block
+        (optional_attribute_declaration
+        (identifier)
+        (type
+            (basic_type)))))
+    (schema_statement
+    (identifier)
+    (block
+        (optional_attribute_declaration
+        (identifier)
+        (type
+            (basic_type)))))
+    (assignment
+    (dotted_name
+        (identifier))
+    (type
+        (union_type
+        (type
+            (schema_type
+            (dotted_name
+                (identifier))))
+        (type
+            (schema_type
+            (dotted_name
+                (identifier))))))
+    (schema_expr
+        (identifier)
+        (dict_expr)))
+    (if_statement
+    (comparison_operator
+        (call
+        (attribute
+            (identifier))
+        (argument_list
+            (attribute
+            (identifier))))
+        (string
+        (string_start)
+        (string_content)
+        (string_end)))
+    (block
+        (assignment
+        (dotted_name
+            (identifier))
+        (as_expression
+            (attribute
+            (identifier))
+            (attribute
+            (identifier)))))
+    (elif_clause
+        (comparison_operator
+        (call
+            (attribute
+            (identifier))
+            (argument_list
+            (attribute
+                (identifier))))
+        (string
+            (string_start)
+            (string_content)
+            (string_end)))
+        (block
+        (assignment
+            (dotted_name
+            (identifier))
+            (as_expression
+            (attribute
+                (identifier))
+            (attribute
+                (identifier))))))))
