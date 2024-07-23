@@ -228,6 +228,10 @@
         "named": true
       },
       {
+        "type": "schema_instantiation",
+        "named": true
+      },
+      {
         "type": "select_suffix",
         "named": true
       },
@@ -371,6 +375,10 @@
           },
           {
             "type": "expression",
+            "named": true
+          },
+          {
+            "type": "schema_instantiation",
             "named": true
           }
         ]
@@ -2037,6 +2045,32 @@
     }
   },
   {
+    "type": "schema_instantiation",
+    "named": true,
+    "fields": {
+      "constructor": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call",
+            "named": true
+          }
+        ]
+      },
+      "initialization": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dictionary",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "schema_statement",
     "named": true,
     "fields": {
@@ -2738,11 +2772,11 @@
   },
   {
     "type": "float",
-    "named": true
+    "named": false
   },
   {
     "type": "float",
-    "named": false
+    "named": true
   },
   {
     "type": "for",

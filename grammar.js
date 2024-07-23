@@ -311,6 +311,11 @@ module.exports = grammar({
       $.dict_expr,
     ),
 
+    schema_instantiation: $ => seq(
+      field('constructor', $.call),
+      field('initialization', $.dictionary)
+    ),
+
     schema_index_signature: $ => seq(
       '[',
       optional(seq(
@@ -576,6 +581,7 @@ module.exports = grammar({
       $.lambda_expr,
       $.quant_expr,
       $.schema_expr,
+      $.schema_instantiation,
       $.paren_expression,
       $.braces_expression,
       $.optional_attribute,
@@ -761,7 +767,7 @@ module.exports = grammar({
     assignment: $ => seq(
       field('left', $.dotted_name),
       choice(
-        seq('=', field('right', choice($.dotted_name,$.expression, $.selector_expression))),
+        seq('=', field('right', choice($.dotted_name,$.expression, $.selector_expression, $.schema_instantiation))),
         seq(':', field('type', $.type), '=', field('right', $.expression)),
         alias(seq(':',field('type', $.type)),'null_assignment'),
       ),

@@ -454,6 +454,27 @@
         }
       ]
     },
+    "schema_instantiation": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "constructor",
+          "content": {
+            "type": "SYMBOL",
+            "name": "call"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "initialization",
+          "content": {
+            "type": "SYMBOL",
+            "name": "dictionary"
+          }
+        }
+      ]
+    },
     "schema_index_signature": {
       "type": "SEQ",
       "members": [
@@ -1649,6 +1670,10 @@
           {
             "type": "SYMBOL",
             "name": "schema_expr"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "schema_instantiation"
           },
           {
             "type": "SYMBOL",
@@ -2893,6 +2918,10 @@
                       {
                         "type": "SYMBOL",
                         "name": "selector_expression"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "schema_instantiation"
                       }
                     ]
                   }
