@@ -454,6 +454,27 @@
         }
       ]
     },
+    "schema_instantiation": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "constructor",
+          "content": {
+            "type": "SYMBOL",
+            "name": "call"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "initialization",
+          "content": {
+            "type": "SYMBOL",
+            "name": "dictionary"
+          }
+        }
+      ]
+    },
     "schema_index_signature": {
       "type": "SEQ",
       "members": [
@@ -1652,6 +1673,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "schema_instantiation"
+          },
+          {
+            "type": "SYMBOL",
             "name": "paren_expression"
           },
           {
@@ -1668,6 +1693,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "optional_attribute_declaration"
+          },
+          {
+            "type": "SYMBOL",
             "name": "null_coalesce"
           },
           {
@@ -1677,6 +1706,10 @@
           {
             "type": "SYMBOL",
             "name": "config_expr"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "selector_expression"
           }
         ]
       }
@@ -2091,6 +2124,10 @@
           {
             "type": "SYMBOL",
             "name": "paren_expression"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "config_expr"
           }
         ]
       }
@@ -2881,6 +2918,14 @@
                       {
                         "type": "SYMBOL",
                         "name": "expression"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "selector_expression"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "schema_instantiation"
                       }
                     ]
                   }
@@ -3188,6 +3233,35 @@
             "content": {
               "type": "SYMBOL",
               "name": "identifier"
+            }
+          }
+        ]
+      }
+    },
+    "optional_attribute_declaration": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "attribute",
+            "content": {
+              "type": "SYMBOL",
+              "name": "identifier"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "?:"
+          },
+          {
+            "type": "FIELD",
+            "name": "type",
+            "content": {
+              "type": "SYMBOL",
+              "name": "type"
             }
           }
         ]

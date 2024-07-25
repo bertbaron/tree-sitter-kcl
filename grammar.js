@@ -311,6 +311,11 @@ module.exports = grammar({
       $.dict_expr,
     ),
 
+    schema_instantiation: $ => seq(
+      field('constructor', $.call),
+      field('initialization', $.dictionary)
+    ),
+
     schema_index_signature: $ => seq(
       '[',
       optional(seq(
@@ -576,13 +581,16 @@ module.exports = grammar({
       $.lambda_expr,
       $.quant_expr,
       $.schema_expr,
+      $.schema_instantiation,
       $.paren_expression,
       $.braces_expression,
       $.optional_attribute,
       $.optional_item,
+      $.optional_attribute_declaration,
       $.null_coalesce,
       $.string_literal_expr,
       $.config_expr,
+      $.selector_expression
     )),
 
     paren_expression: $ => seq(
@@ -675,7 +683,8 @@ module.exports = grammar({
       $.string,
       $.integer,
       $.float,
-      $.paren_expression
+      $.paren_expression,
+      $.config_expr
     )),
     
     dotted_identifier: $ => prec(4, seq(
@@ -759,7 +768,7 @@ module.exports = grammar({
     assignment: $ => seq(
       field('left', $.dotted_name),
       choice(
-        seq('=', field('right', choice($.dotted_name,$.expression,))),
+        seq('=', field('right', choice($.dotted_name,$.expression, $.selector_expression, $.schema_instantiation))),
         seq(':', field('type', $.type), '=', field('right', $.expression)),
         alias(seq(':',field('type', $.type)),'null_assignment'),
       ),
@@ -800,6 +809,12 @@ module.exports = grammar({
       field('object', $.primary_expression),
       '?.',
       field('attribute', $.identifier),
+    )),
+
+    optional_attribute_declaration: $ => prec(2, seq(
+      field('attribute', $.identifier),
+      '?:',
+      field('type', $.type),
     )),
 
     optional_item: $ => prec(PREC.call, seq(

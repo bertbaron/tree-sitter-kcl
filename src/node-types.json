@@ -208,6 +208,10 @@
         "named": true
       },
       {
+        "type": "optional_attribute_declaration",
+        "named": true
+      },
+      {
         "type": "optional_item",
         "named": true
       },
@@ -224,7 +228,15 @@
         "named": true
       },
       {
+        "type": "schema_instantiation",
+        "named": true
+      },
+      {
         "type": "select_suffix",
+        "named": true
+      },
+      {
+        "type": "selector_expression",
         "named": true
       },
       {
@@ -363,6 +375,10 @@
           },
           {
             "type": "expression",
+            "named": true
+          },
+          {
+            "type": "schema_instantiation",
             "named": true
           }
         ]
@@ -785,10 +801,6 @@
         },
         {
           "type": "primary_expression",
-          "named": true
-        },
-        {
-          "type": "selector_expression",
           "named": true
         }
       ]
@@ -1675,6 +1687,32 @@
     }
   },
   {
+    "type": "optional_attribute_declaration",
+    "named": true,
+    "fields": {
+      "attribute": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "optional_item",
     "named": true,
     "fields": {
@@ -2007,6 +2045,32 @@
     }
   },
   {
+    "type": "schema_instantiation",
+    "named": true,
+    "fields": {
+      "constructor": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call",
+            "named": true
+          }
+        ]
+      },
+      "initialization": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dictionary",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "schema_statement",
     "named": true,
     "fields": {
@@ -2212,6 +2276,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "config_expr",
+          "named": true
+        },
         {
           "type": "dotted_name",
           "named": true
@@ -2583,6 +2651,10 @@
     "named": false
   },
   {
+    "type": "?:",
+    "named": false
+  },
+  {
     "type": "?[",
     "named": false
   },
@@ -2704,11 +2776,11 @@
   },
   {
     "type": "float",
-    "named": true
+    "named": false
   },
   {
     "type": "float",
-    "named": false
+    "named": true
   },
   {
     "type": "for",
