@@ -2124,6 +2124,10 @@
           {
             "type": "SYMBOL",
             "name": "paren_expression"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "config_expr"
           }
         ]
       }

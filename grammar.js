@@ -683,7 +683,8 @@ module.exports = grammar({
       $.string,
       $.integer,
       $.float,
-      $.paren_expression
+      $.paren_expression,
+      $.config_expr
     )),
     
     dotted_identifier: $ => prec(4, seq(

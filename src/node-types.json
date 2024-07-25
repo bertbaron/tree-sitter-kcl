@@ -2277,6 +2277,10 @@
       "required": true,
       "types": [
         {
+          "type": "config_expr",
+          "named": true
+        },
+        {
           "type": "dotted_name",
           "named": true
         },
