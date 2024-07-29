@@ -424,6 +424,11 @@ module.exports = grammar({
     schema_statement: $ => prec.left(seq(
       'schema',
       field('name', $.parameter),
+      optional(seq(
+        '(',
+        field('base', $.identifier),
+        ')'
+      )),
       ':',
       field('body', $._suite),
     )),

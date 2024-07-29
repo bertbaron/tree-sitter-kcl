@@ -322,3 +322,27 @@ schema Environment:
                 (test
                   (dotted_name
                     (identifier)))))))))))
+
+================================================================================
+Schema index signature attribute alias
+================================================================================
+
+schema employee(person):
+    bankCard: int
+    gender: str
+
+--------------------------------------------------------------------------------
+
+(module
+  (schema_statement
+    (identifier)
+    (identifier)
+    (block
+      (assignment
+        (dotted_name
+          (identifier))
+        (basic_type))
+      (assignment
+        (dotted_name
+          (identifier))
+        (basic_type)))))
