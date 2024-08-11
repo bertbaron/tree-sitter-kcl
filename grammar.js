@@ -212,10 +212,10 @@ module.exports = grammar({
 
     // Simple statements
 
-    _simple_statements: $ => seq(
+    _simple_statements: $ => prec(24, seq(
       $._simple_statement,
       $._newline,
-    ),
+    )),
 
     _simple_statement: $ => choice(
       $.expression,
@@ -225,6 +225,7 @@ module.exports = grammar({
       $.import_statement,
       $.assert_statement,
       $.type_alias_statement,
+      $.mixin_statement,
     ),
 
     import_statement: $ => seq(
@@ -313,15 +314,28 @@ module.exports = grammar({
       )
     )),
 
-    rule_statement: $ => seq(
+    rule_statement: $ => prec.left(seq(
       'rule',
-      field('name', $.identifier),
+      field('name', $.parameter),
       optional(seq(
+        '(',
+        field('base', $.identifier),
+        ')'
+      )),
+      optional(seq( 
         'for',
-        field('protocol', $.identifier)
+        field('protocol', $.identifier),
       )),
       ':',
-      field('body', $._suite)
+      field('body', $._suite),
+    )),
+
+    parameter_list: $ => seq(
+      $.identifier,
+      repeat(seq(
+        ',',
+        $.identifier
+      ))
     ),
 
     elif_clause: $ => seq(
@@ -465,18 +479,22 @@ module.exports = grammar({
         field('base', $.identifier),
         ')'
       )),
+      optional(seq( 
+        'for',
+        field('protocol', $.identifier),
+      )),
       ':',
       field('body', $._suite),
     )),
 
     mixin_statement: $ => seq(
       'mixin',
-      field('name', $.identifier),
-      'for',
-      field('protocol', $.identifier),
-      ':',
-      field('body', $._suite),
-    ),
+      field('name', $.primary_expression),
+      optional(seq('for',
+        field('protocol', $.identifier),
+        ':',
+        field('body', $._suite),
+    ))),
 
     protocol_statement: $ => seq(
       'protocol',
@@ -541,6 +559,8 @@ module.exports = grammar({
     _suite: $ => choice(
       alias($._simple_statements, $.block),
       seq($._indent, $.block),
+      seq($.assignment, $._newline),
+      seq($.comparison_operator, $._newline),
       alias($._newline, $.block),
     ),
 
@@ -648,7 +668,7 @@ module.exports = grammar({
 
     not_operator: $ => prec(PREC.not, seq(
       'not',
-      field('argument', $.expression),
+      field('argument', $.primary_expression),
     )),
 
     boolean_operator: $ => choice(
