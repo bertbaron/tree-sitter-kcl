@@ -212,10 +212,10 @@ module.exports = grammar({
 
     // Simple statements
 
-    _simple_statements: $ => seq(
+    _simple_statements: $ => prec(24, seq(
       $._simple_statement,
       $._newline,
-    ),
+    )),
 
     _simple_statement: $ => choice(
       $.expression,
@@ -225,6 +225,7 @@ module.exports = grammar({
       $.import_statement,
       $.assert_statement,
       $.type_alias_statement,
+      $.mixin_statement,
     ),
 
     import_statement: $ => seq(
@@ -259,6 +260,7 @@ module.exports = grammar({
 
     _compound_statement: $ => choice(
       $.if_statement,
+      $.if_rule_statement,
       $.schema_index_signature,
       // TODO: schema and rule statement grammars
       $.schema_statement,
@@ -269,24 +271,72 @@ module.exports = grammar({
       $.decorated_definition,
     ),
 
-    if_statement: $ => choice(seq(
-      'if',
-      field('condition', $.expression),
-      ':',
-      field('consequence', $._suite),
-      repeat(field('alternative', $.elif_clause)),
-      optional(field('alternative', $.else_clause)),
-    ),
+    if_statement: $ => choice(
+      seq(
+        'if',
+        field('condition', $.expression),
+        optional(':'),
+        field('consequence', $._suite),
+        repeat(field('alternative', $.elif_clause)),
+        optional(field('alternative', $.else_clause)),
+      ),
       seq(
         field('condition',$.expression),
         ',',
         field('error_message', $.string),
-    ),
+      ),
+      $.conditional_expression,
       seq(
         field('expr1',$.expression),
         'if',
-        field('condition',$.expression),
+        field('condition', $.expression),
+      )
+    ),
+
+    if_rule_statement: $ => prec.left(4, choice(
+      seq(
+        'if',
+        field('condition', $.expression),
+        optional(seq(':', field('separator', $.string))),
+        field('consequence', $._suite),
+        repeat(field('alternative', $.elif_clause)),
+        optional(field('alternative', $.else_clause)),
+      ),
+      seq(
+        field('condition', $.expression),
+        ',',
+        field('error_message', $.string),
+      ),
+      seq(
+        field('expr1', $.expression),
+        'if',
+        field('condition', $.expression),
+      )
+    )),
+
+    rule_statement: $ => prec.left(seq(
+      'rule',
+      field('name', $.parameter),
+      optional(seq(
+        '(',
+        field('base', $.identifier),
+        ')'
       )),
+      optional(seq( 
+        'for',
+        field('protocol', $.identifier),
+      )),
+      ':',
+      field('body', $._suite),
+    )),
+
+    parameter_list: $ => seq(
+      $.identifier,
+      repeat(seq(
+        ',',
+        $.identifier
+      ))
+    ),
 
     elif_clause: $ => seq(
       'elif',
@@ -352,7 +402,7 @@ module.exports = grammar({
       field('quant_op', $.quant_op),
       optional(seq(
         field('identifier', $.identifier),
-        ',',
+        ','
       )),
       field('identifier', $.identifier),
       'in',
@@ -369,7 +419,7 @@ module.exports = grammar({
         'if',
         field('expr2', $.expression)
       )),
-      '}',
+      '}'
     )),
 
     quant_target: $ => prec(1, choice(
@@ -424,18 +474,27 @@ module.exports = grammar({
     schema_statement: $ => prec.left(seq(
       'schema',
       field('name', $.parameter),
+      optional(seq(
+        '(',
+        field('base', $.identifier),
+        ')'
+      )),
+      optional(seq( 
+        'for',
+        field('protocol', $.identifier),
+      )),
       ':',
       field('body', $._suite),
     )),
 
     mixin_statement: $ => seq(
       'mixin',
-      field('name', $.identifier),
-      'for',
-      field('protocol', $.identifier),
-      ':',
-      field('body', $._suite),
-    ),
+      field('name', $.primary_expression),
+      optional(seq('for',
+        field('protocol', $.identifier),
+        ':',
+        field('body', $._suite),
+    ))),
 
     protocol_statement: $ => seq(
       'protocol',
@@ -447,6 +506,10 @@ module.exports = grammar({
     rule_statement: $ => seq(
       'rule',
       field('name', $.identifier),
+      optional(seq(
+        'for',
+        field('protocol', $.identifier),                                                                                                                                                                                                                                                                              
+      )),
       ':',
       field('body', $._suite),
     ),
@@ -496,6 +559,8 @@ module.exports = grammar({
     _suite: $ => choice(
       alias($._simple_statements, $.block),
       seq($._indent, $.block),
+      seq($.assignment, $._newline),
+      seq($.comparison_operator, $._newline),
       alias($._newline, $.block),
     ),
 
@@ -537,6 +602,7 @@ module.exports = grammar({
     // Expressions
 
     expression: $ => prec(1, choice(
+      $.conditional_expression,
       $.sequence_operation,
       $.comparison_operator,
       $.not_operator,
@@ -544,7 +610,6 @@ module.exports = grammar({
       $.selector_expression,
       $.primary_expression,
       $.as_expression,
-      $.conditional_expression,
       $.long_expression,
     )),
 
@@ -590,7 +655,7 @@ module.exports = grammar({
       $.null_coalesce,
       $.string_literal_expr,
       $.config_expr,
-      $.selector_expression
+      $.selector_expression,
     )),
 
     paren_expression: $ => seq(
@@ -603,7 +668,7 @@ module.exports = grammar({
 
     not_operator: $ => prec(PREC.not, seq(
       'not',
-      field('argument', $.expression),
+      field('argument', $.primary_expression),
     )),
 
     boolean_operator: $ => choice(
@@ -964,12 +1029,12 @@ module.exports = grammar({
       $.expression,
     ),
 
-    conditional_expression: $ => prec.right(PREC.conditional, seq(
+    conditional_expression: $ => prec.right(PREC.conditional + 24, seq(
       $.expression,
       'if',
       $.expression,
-      'else',
-      $.expression,
+      optional('else'),
+      optional($.expression),
     )),
 
     raw_string: $ => prec(64, seq(

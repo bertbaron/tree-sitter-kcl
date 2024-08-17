@@ -52,7 +52,7 @@ rule SomeRule:
   (rule_statement
     (identifier)
     (block
-      (if_statement
+      (if_rule_statement
         (comparison_operator
           (attribute
             (identifier))
@@ -322,3 +322,140 @@ schema Environment:
                 (test
                   (dotted_name
                     (identifier)))))))))))
+
+================================================================================
+Schema index signature attribute alias
+================================================================================
+
+schema employee(person):
+    bankCard: int
+    gender: str
+
+--------------------------------------------------------------------------------
+
+(module
+  (schema_statement
+    (identifier)
+    (identifier)
+    (block
+      (assignment
+        (dotted_name
+          (identifier))
+        (basic_type))
+      (assignment
+        (dotted_name
+          (identifier))
+        (basic_type)))))
+
+================================================================================
+Rule Statement with any condition
+================================================================================
+
+rule SomeChecker for SomeProtocol:
+    id > 0, "id must >0"
+
+    any service in services {
+        service.clusterIP == "NONE" if service.type
+    }
+   
+--------------------------------------------------------------------------------
+
+(module
+  (rule_statement
+    (identifier)
+    (identifier)
+    (block
+      (if_rule_statement
+        (comparison_operator
+          (attribute
+            (identifier))
+          (integer))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (quant_expr
+        (quant_op)
+        (identifier)
+        (quant_target
+          (identifier))
+        (comparison_operator
+          (selector_expression
+            (attribute
+              (identifier))
+            (select_suffix
+              (identifier)))
+          (selector_expression
+            (conditional_expression
+              (string
+                (string_start)
+                (string_content)
+                (string_end))
+              (attribute
+                (identifier)))
+            (select_suffix
+              (identifier))))))))
+
+================================================================================
+Schema Mixin Statement
+================================================================================
+
+schema Parent:
+    mixin [NameMixin]
+    age: int
+   
+--------------------------------------------------------------------------------
+
+(module
+  (schema_statement
+    (identifier)
+    (block
+      (mixin_statement
+        (list
+          (attribute
+            (identifier))))
+      (assignment
+        (dotted_name
+          (identifier))
+        (basic_type)))))
+
+================================================================================
+Schema Statement with checks
+================================================================================
+
+schema NameMixin:
+  check:
+    name None
+   
+--------------------------------------------------------------------------------
+
+(module
+  (schema_statement
+    (identifier)
+    (block
+      (check_statement
+        (attribute
+          (identifier)))
+      (none))))
+
+================================================================================
+Schema Statement with Data
+================================================================================
+
+schema Data for DataProtocol:
+    x: str = data
+   
+--------------------------------------------------------------------------------
+
+(module
+  (schema_statement
+    (identifier)
+    (identifier)
+    (block
+      (assignment
+        (dotted_name
+          (identifier))
+        (type
+          (basic_type))
+        (attribute
+          (identifier))))))
