@@ -459,3 +459,31 @@ schema Data for DataProtocol:
           (basic_type))
         (attribute
           (identifier))))))
+
+================================================================================
+schema config
+================================================================================
+
+schema Config:
+    x?: int = 1
+    y ?: str = "s"
+
+--------------------------------------------------------------------------------
+
+(module
+  (schema_statement
+    (identifier)
+    (block
+      (optional_attribute_declaration
+        (identifier)
+        (type
+          (basic_type))
+        (integer))
+      (optional_attribute_declaration
+        (identifier)
+        (type
+          (basic_type))
+        (string
+          (string_start)
+          (string_content)
+          (string_end))))))
