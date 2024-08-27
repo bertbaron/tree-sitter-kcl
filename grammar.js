@@ -409,7 +409,7 @@ module.exports = grammar({
       field('quant_target', $.quant_target),
       '{',
       choice(
-        field('expr1', $.expression),
+        field('expr1', choice($.subscript, $.expression)),
         seq(
           field('dotted_name', $.dotted_name),
           field('string', $.string)
@@ -423,6 +423,8 @@ module.exports = grammar({
     )),
 
     quant_target: $ => prec(1, choice(
+      $.subscript,
+      $.call,
       field('dictionary_or_list', $.identifier),
       $.dictionary,
       $.string,
@@ -649,6 +651,7 @@ module.exports = grammar({
       $.schema_instantiation,
       $.paren_expression,
       $.braces_expression,
+      $.not_expression,
       $.optional_attribute,
       $.optional_item,
       $.optional_attribute_declaration,
@@ -669,6 +672,12 @@ module.exports = grammar({
     not_operator: $ => prec(PREC.not, seq(
       'not',
       field('argument', $.primary_expression),
+    )),
+
+    not_expression : $ => prec.left(PREC.not, seq(
+      $.primary_expression,
+      'not',
+      $.primary_expression
     )),
 
     boolean_operator: $ => choice(
@@ -876,10 +885,14 @@ module.exports = grammar({
       field('attribute', $.identifier),
     )),
 
-    optional_attribute_declaration: $ => prec(2, seq(
+    optional_attribute_declaration: $ => prec.right(12, seq(
       field('attribute', $.identifier),
       '?:',
       field('type', $.type),
+      optional(seq(
+        '=',
+        field('default', $.expression)
+      ))
     )),
 
     optional_item: $ => prec(PREC.call, seq(

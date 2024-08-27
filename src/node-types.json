@@ -208,6 +208,10 @@
         "named": true
       },
       {
+        "type": "not_expression",
+        "named": true
+      },
+      {
         "type": "null_coalesce",
         "named": true
       },
@@ -1696,6 +1700,21 @@
     }
   },
   {
+    "type": "not_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "primary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "not_in_operation",
     "named": true,
     "fields": {},
@@ -1836,6 +1855,16 @@
           }
         ]
       },
+      "default": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
       "type": {
         "multiple": false,
         "required": true,
@@ -1970,6 +1999,10 @@
           {
             "type": "expression",
             "named": true
+          },
+          {
+            "type": "subscript",
+            "named": true
           }
         ]
       },
@@ -2060,6 +2093,10 @@
       "required": false,
       "types": [
         {
+          "type": "call",
+          "named": true
+        },
+        {
           "type": "config_expr",
           "named": true
         },
@@ -2081,6 +2118,10 @@
         },
         {
           "type": "string",
+          "named": true
+        },
+        {
+          "type": "subscript",
           "named": true
         }
       ]

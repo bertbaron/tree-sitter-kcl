@@ -945,8 +945,17 @@
                 "type": "FIELD",
                 "name": "expr1",
                 "content": {
-                  "type": "SYMBOL",
-                  "name": "expression"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "subscript"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "expression"
+                    }
+                  ]
                 }
               },
               {
@@ -1010,6 +1019,14 @@
       "content": {
         "type": "CHOICE",
         "members": [
+          {
+            "type": "SYMBOL",
+            "name": "subscript"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "call"
+          },
           {
             "type": "FIELD",
             "name": "dictionary_or_list",
@@ -1988,6 +2005,10 @@
           },
           {
             "type": "SYMBOL",
+            "name": "not_expression"
+          },
+          {
+            "type": "SYMBOL",
             "name": "optional_attribute"
           },
           {
@@ -2068,6 +2089,27 @@
               "type": "SYMBOL",
               "name": "primary_expression"
             }
+          }
+        ]
+      }
+    },
+    "not_expression": {
+      "type": "PREC_LEFT",
+      "value": 12,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "primary_expression"
+          },
+          {
+            "type": "STRING",
+            "value": "not"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "primary_expression"
           }
         ]
       }
@@ -3542,8 +3584,8 @@
       }
     },
     "optional_attribute_declaration": {
-      "type": "PREC",
-      "value": 2,
+      "type": "PREC_RIGHT",
+      "value": 12,
       "content": {
         "type": "SEQ",
         "members": [
@@ -3566,6 +3608,31 @@
               "type": "SYMBOL",
               "name": "type"
             }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "="
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "default",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "expression"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
           }
         ]
       }
