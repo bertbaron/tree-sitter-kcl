@@ -487,3 +487,289 @@ schema Config:
           (string_start)
           (string_content)
           (string_end))))))
+
+================================================================================
+Rule Structure
+================================================================================
+
+rule SomeChecker for SomeProtocol:
+  id > 0, "id must >0"
+
+  any volume in volumes {
+    volume.mountPath in ["/home/admin", "/home/myapp"]
+  }
+
+--------------------------------------------------------------------------------
+
+(module
+  (rule_statement
+    (identifier)
+    (identifier)
+    (block
+      (if_rule_statement
+        (comparison_operator
+          (attribute
+            (identifier))
+          (integer))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (quant_expr
+        (quant_op)
+        (identifier)
+        (quant_target
+          (identifier))
+        (comparison_operator
+          (selector_expression
+            (attribute
+              (identifier))
+            (select_suffix
+              (identifier)))
+          (list
+            (string
+              (string_start)
+              (string_content)
+              (string_end))
+            (string
+              (string_start)
+              (string_content)
+              (string_end))))))))
+
+================================================================================
+Check with Config Parameter
+================================================================================
+
+SomeChecker {
+  id = 1
+  env = {
+    MY_ENV = "MY_ENV_VALUE"
+  }
+  services = [
+    {
+        type = "ClusterIP"
+        clusterIp = "NONE"
+    }
+  ]
+  volumes = [
+    {
+        mountPath = "/home/admin"
+    },
+    {
+        mountPath = "/home/myapp"
+    }
+  ]
+}
+
+--------------------------------------------------------------------------------
+
+(module
+  (schema_expr
+    (identifier)
+    (dict_expr
+      (pair
+        (attribute
+          (identifier))
+        (integer))
+      (pair
+        (attribute
+          (identifier))
+        (config_expr
+          (config_entries
+            (config_entry
+              (test
+                (dotted_name
+                  (identifier)))
+              (test
+                (string
+                  (string_start)
+                  (string_content)
+                  (string_end)))))))
+      (pair
+        (attribute
+          (identifier))
+        (list
+          (config_expr
+            (config_entries
+              (config_entry
+                (test
+                  (dotted_name
+                    (identifier)))
+                (test
+                  (string
+                    (string_start)
+                    (string_content)
+                    (string_end))))
+              (config_entry
+                (test
+                  (dotted_name
+                    (identifier)))
+                (test
+                  (string
+                    (string_start)
+                    (string_content)
+                    (string_end))))))))
+      (pair
+        (attribute
+          (identifier))
+        (list
+          (config_expr
+            (config_entries
+              (config_entry
+                (test
+                  (dotted_name
+                    (identifier)))
+                (test
+                  (string
+                    (string_start)
+                    (string_content)
+                    (string_end))))))
+          (config_expr
+            (config_entries
+              (config_entry
+                (test
+                  (dotted_name
+                    (identifier)))
+                (test
+                  (string
+                    (string_start)
+                    (string_content)
+                    (string_end)))))))))))
+
+================================================================================
+Multiplexing Rule Statement
+================================================================================
+
+
+rule Allow:
+  UserIsAdmin()
+  any grant in UserIsGranted() {
+      input.action == grant.action
+  }
+
+rule UserIsAdmin:
+  any user in data.user_roles[input.user] {
+      user == "admin"
+  }
+
+--------------------------------------------------------------------------------
+
+(module
+  (rule_statement
+    (identifier)
+    (block
+      (call
+        (attribute
+          (identifier))
+        (argument_list))
+      (quant_expr
+        (quant_op)
+        (identifier)
+        (quant_target
+          (call
+            (attribute
+              (identifier))
+            (argument_list)))
+        (comparison_operator
+          (selector_expression
+            (attribute
+              (identifier))
+            (select_suffix
+              (identifier)))
+          (selector_expression
+            (attribute
+              (identifier))
+            (select_suffix
+              (identifier)))))))
+  (rule_statement
+    (identifier)
+    (block
+      (quant_expr
+        (quant_op)
+        (identifier)
+        (quant_target
+          (subscript
+            (selector_expression
+              (attribute
+                (identifier))
+              (select_suffix
+                (identifier)))
+            (selector_expression
+              (attribute
+                (identifier))
+              (select_suffix
+                (identifier)))))
+        (comparison_operator
+          (attribute
+            (identifier))
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))))))
+
+================================================================================
+schema with multiple keywords
+================================================================================
+
+schema NameMixin:
+    check:
+        name not None
+
+schema Person:
+    """
+    Person schema definition
+    """
+    mixin [NameMixin]
+
+    name: str = "Alice"
+    age: int
+
+person = Person {
+    age = 18
+}
+
+--------------------------------------------------------------------------------
+
+  (module
+    (schema_statement
+      (identifier)
+      (block
+        (check_statement
+          (not_expression
+            (attribute
+              (identifier))
+            (none)))))
+    (schema_statement
+      (identifier)
+      (block
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (mixin_statement
+          (list
+            (attribute
+              (identifier))))
+        (assignment
+          (dotted_name
+            (identifier))
+          (type
+            (basic_type))
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))
+        (assignment
+          (dotted_name
+            (identifier))
+          (basic_type))))
+    (assignment
+      (dotted_name
+        (identifier))
+      (schema_expr
+        (identifier)
+        (dict_expr
+          (pair
+            (attribute
+              (identifier))
+            (integer))))))
