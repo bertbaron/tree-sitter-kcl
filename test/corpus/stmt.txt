@@ -7,10 +7,10 @@ if True: a = 1
 --------------------------------------------------------------------------------
 
 (module
-  (if_statement
+  (if_stmt
     (true)
     (block
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (integer)))))
@@ -26,14 +26,14 @@ if True:
 --------------------------------------------------------------------------------
 
 (module
-  (if_statement
+  (if_stmt
     (true)
     (block
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (integer))
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (integer)))))
@@ -50,16 +50,16 @@ else:
 --------------------------------------------------------------------------------
 
 (module
-  (if_statement
+  (if_stmt
     (true)
     (block
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (integer)))
     (else_clause
       (block
-        (assignment
+        (assign_stmt
           (dotted_name
             (identifier))
           (integer))))))
@@ -78,23 +78,23 @@ else:
 --------------------------------------------------------------------------------
 
 (module
-  (if_statement
+  (if_stmt
     (true)
     (block
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (integer)))
     (elif_clause
       (false)
       (block
-        (assignment
+        (assign_stmt
           (dotted_name
             (identifier))
           (integer))))
     (else_clause
       (block
-        (assignment
+        (assign_stmt
           (dotted_name
             (identifier))
           (integer))))))

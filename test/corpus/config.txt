@@ -10,29 +10,23 @@ data = {
 --------------------------------------------------------------------------------
 
 (module
-    (assignment
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (config_expr
-        (config_entries
+      (config_entries
         (config_entry
-            (test
-                (dotted_name
-                    (identifier)))
-            (test
-            (string
-                (string_start)
-                (string_content)
-                (string_end))))
+          (identifier)
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))
         (config_entry
-            (test
-                (dotted_name
-                    (identifier)))
-            (test
-            (string
-                (string_start)
-                (string_content)
-                (string_end))))))))
+          (identifier)
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))))))
 
 ================================================================================
 Config Override
@@ -48,41 +42,41 @@ data = Data {
 --------------------------------------------------------------------------------
 
 (module
-    (schema_statement
+  (schema_stmt
     (identifier)
     (block
-        (assignment
+      (assign_stmt
         (dotted_name
-            (identifier))
+          (identifier))
         (type
-            (dict_type
+          (dict_type
             (type
-                (basic_type))))
-        (dictionary
-            (pair
-            (attribute
-                (identifier))
-            (string
+              (basic_type))))
+        (config_expr
+          (config_entries
+            (config_entry
+              (identifier)
+              (string
                 (string_start)
                 (string_content)
-                (string_end)))))))
-    (assignment
+                (string_end))))))))
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (schema_expr
-        (identifier)
-        (dict_expr
-        (pair
-            (attribute
-            (identifier))
-            (dictionary
-            (pair
-                (attribute
-                (identifier))
-                (string
-                (string_start)
-                (string_content)
-                (string_end)))))))))
+      (identifier)
+      (config_expr
+        (config_entries
+          (config_entry
+            (identifier)
+            (config_expr
+              (config_entries
+                (config_entry
+                  (identifier)
+                  (string
+                    (string_start)
+                    (string_content)
+                    (string_end)))))))))))
 
 ================================================================================
 Config Selector Expression
@@ -96,25 +90,20 @@ config = {
 --------------------------------------------------------------------------------
 
 (module
-    (assignment
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (config_expr
-        (config_entries
+      (config_entries
         (config_entry
-            (test
-                (dotted_name
-                    (identifier)))
-            (test
-            (string
-                (string_start)
-                (string_content)
-                (string_end))))
+          (identifier)
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))
         (config_entry
-            (test
-                (dotted_name
-                    (identifier)
-                    (identifier)))
-            (test
-                (dotted_name
-                    (identifier))))))))
+          (selector_expr
+            (identifier)
+            (select_suffix
+              (identifier)))
+          (identifier))))))

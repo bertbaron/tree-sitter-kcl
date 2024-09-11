@@ -52,14 +52,14 @@ schema Person:
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (block
       (string
         (string_start)
         (string_content)
         (string_end))
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (type
@@ -83,9 +83,9 @@ number
 (module
   (integer)
   (float)
-  (unary_operator
+  (unary_expr
     (float))
-  (unary_operator
+  (unary_expr
     (integer)))
 
 ================================================================================
@@ -114,7 +114,7 @@ list
 --------------------------------------------------------------------------------
 
 (module
-  (list
+  (list_expr
     (integer)
     (integer)
     (integer)))
@@ -128,10 +128,11 @@ Dictionary
 --------------------------------------------------------------------------------
 
 (module
-  (dictionary
-    (pair
-      (string
-        (string_start)
-        (string_content)
-        (string_end))
-      (integer))))
+  (config_expr
+    (config_entries
+      (config_entry
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (integer)))))

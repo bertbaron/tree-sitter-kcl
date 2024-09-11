@@ -7,13 +7,13 @@ k = 1
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
     (integer)))
 
 ================================================================================
-Identifiers with '$' sign 
+Identifiers with '$' sign
 ================================================================================
 
 $if = 1
@@ -22,17 +22,17 @@ $else = "s"
 --------------------------------------------------------------------------------
 
 (module
-      (assignment
-        (dotted_name
-          (identifier))
-        (integer))
-      (assignment
-        (dotted_name
-          (identifier))
-        (string
-          (string_start)
-          (string_content)
-          (string_end))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (integer))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (string
+      (string_start)
+      (string_content)
+      (string_end))))
 
 ================================================================================
 augmented assign statements
@@ -43,7 +43,7 @@ k += 1
 --------------------------------------------------------------------------------
 
 (module
-  (augmented_assignment
+  (aug_assign_stmt
     (dotted_name
       (identifier))
     (integer)))
