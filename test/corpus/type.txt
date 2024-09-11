@@ -10,32 +10,32 @@ d: bool = True
 --------------------------------------------------------------------------------
 
 (module
-    (assignment
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (type
-        (basic_type))
+      (basic_type))
     (integer))
-    (assignment
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (type
-        (basic_type))
+      (basic_type))
     (string
-        (string_start)
-        (string_content)
-        (string_end)))
-    (assignment
+      (string_start)
+      (string_content)
+      (string_end)))
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (type
-        (basic_type))
+      (basic_type))
     (float))
-    (assignment
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (type
-        (basic_type))
+      (basic_type))
     (true)))
 
 ================================================================================
@@ -47,17 +47,17 @@ a: [int] = [1, 2, 3]
 --------------------------------------------------------------------------------
 
 (module
-    (assignment
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (type
-        (list_type
+      (list_type
         (type
-            (basic_type))))
-    (list
-        (integer)
-        (integer)
-        (integer))))
+          (basic_type))))
+    (list_expr
+      (integer)
+      (integer)
+      (integer))))
 
 ================================================================================
 Dictionary Type
@@ -68,30 +68,29 @@ b: {str:str} = {k1 = "v1", k2 = "v2"}
 --------------------------------------------------------------------------------
 
 (module
-    (assignment
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (type
-        (dict_type
+      (dict_type
         (type
-            (basic_type))
+          (basic_type))
         (type
-            (basic_type))))
-    (dictionary
-        (pair
-        (attribute
-            (identifier))
-        (string
+          (basic_type))))
+    (config_expr
+      (config_entries
+        (config_entry
+          (identifier)
+          (string
             (string_start)
             (string_content)
             (string_end)))
-        (pair
-        (attribute
-            (identifier))
-        (string
+        (config_entry
+          (identifier)
+          (string
             (string_start)
             (string_content)
-            (string_end))))))
+            (string_end)))))))
 
 ================================================================================
 Schema Type
@@ -106,34 +105,34 @@ c: Person = Person {}
 --------------------------------------------------------------------------------
 
 (module
-    (schema_statement
+  (schema_stmt
     (identifier)
     (block
-        (assignment
+      (assign_stmt
         (dotted_name
-            (identifier))
+          (identifier))
         (type
-            (basic_type))
+          (basic_type))
         (string
-            (string_start)
-            (string_content)
-            (string_end)))
-        (assignment
+          (string_start)
+          (string_content)
+          (string_end)))
+      (assign_stmt
         (dotted_name
-            (identifier))
+          (identifier))
         (type
-            (basic_type))
+          (basic_type))
         (integer))))
-    (assignment
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (type
-        (schema_type
+      (schema_type
         (dotted_name
-            (identifier))))
+          (identifier))))
     (schema_expr
-        (identifier)
-        (dict_expr))))
+      (identifier)
+      (config_expr))))
 
 ================================================================================
 Union Type
@@ -145,25 +144,25 @@ schema x[argc: int]:
 --------------------------------------------------------------------------------
 
 (module
-      (schema_statement
-        (typed_parameter
-          (identifier)
-          (identifier)
+  (schema_stmt
+    (typed_parameter
+      (identifier)
+      (identifier)
+      (type
+        (basic_type)))
+    (block
+      (assign_stmt
+        (dotted_name
+          (identifier))
+        (union_type
           (type
-            (basic_type)))
-        (block
-          (assignment
-            (dotted_name
-              (identifier))
             (union_type
               (type
-                (union_type
-                  (type
-                    (basic_type))
-                  (type
-                    (basic_type))))
+                (basic_type))
               (type
-                (basic_type)))))))
+                (basic_type))))
+          (type
+            (basic_type)))))))
 
 ================================================================================
 Any Type
@@ -179,52 +178,52 @@ config = Config {}
 --------------------------------------------------------------------------------
 
 (module
-    (schema_statement
+  (schema_stmt
     (identifier)
     (block
-        (assignment
+      (assign_stmt
         (dotted_name
-            (identifier))
+          (identifier))
         (type
-            (basic_type))
+          (basic_type))
         (integer))
-        (assignment
+      (assign_stmt
         (dotted_name
-            (identifier))
+          (identifier))
         (type
-            (dict_type
+          (dict_type
             (type
-                (basic_type))
+              (basic_type))
             (type
-                (basic_type))))
-        (dictionary
-            (pair
-            (attribute
-                (identifier))
-            (string
+              (basic_type))))
+        (config_expr
+          (config_entries
+            (config_entry
+              (identifier)
+              (string
                 (string_start)
                 (string_content)
-                (string_end)))))
-        (assignment
+                (string_end))))))
+      (assign_stmt
         (dotted_name
-            (identifier))
+          (identifier))
         (type
-            (list_type
+          (list_type
             (type
-                (basic_type))))
-        (list
-            (integer)
-            (string
+              (basic_type))))
+        (list_expr
+          (integer)
+          (string
             (string_start)
             (string_content)
             (string_end))
-            (true)))))
-    (assignment
+          (true)))))
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (schema_expr
-        (identifier)
-        (dict_expr))))
+      (identifier)
+      (config_expr))))
 
 ================================================================================
 Type Alias Statement with import
@@ -237,19 +236,19 @@ type Data = pkg.Data
 --------------------------------------------------------------------------------
 
 (module
-    (import_statement
+  (import_stmt
     (dotted_name
-        (identifier)))
-    (type_alias_statement
+      (identifier)))
+  (type_alias_stmt
     (type
-        (schema_type
+      (schema_type
         (dotted_name
-            (identifier))))
+          (identifier))))
     (type
-        (schema_type
+      (schema_type
         (dotted_name
-            (identifier)
-            (identifier))))))
+          (identifier)
+          (identifier))))))
 
 ================================================================================
 Type Alias Statement with Union Type
@@ -267,61 +266,60 @@ config = Config {
 --------------------------------------------------------------------------------
 
 (module
-    (type_alias_statement
+  (type_alias_stmt
     (type
-        (schema_type
+      (schema_type
         (dotted_name
-            (identifier))))
+          (identifier))))
     (type
-        (union_type
+      (union_type
         (type
-            (union_type
+          (union_type
             (type
-                (literal_type
+              (literal_type
                 (string
-                    (string_start)
-                    (string_content)
-                    (string_end))))
+                  (string_start)
+                  (string_content)
+                  (string_end))))
             (type
-                (literal_type
+              (literal_type
                 (string
-                    (string_start)
-                    (string_content)
-                    (string_end))))))
+                  (string_start)
+                  (string_content)
+                  (string_end))))))
         (type
-            (literal_type
+          (literal_type
             (string
-                (string_start)
-                (string_content)
-                (string_end)))))))
-    (schema_statement
+              (string_start)
+              (string_content)
+              (string_end)))))))
+  (schema_stmt
     (identifier)
     (block
-        (assignment
+      (assign_stmt
         (dotted_name
-            (identifier))
+          (identifier))
         (type
-            (schema_type
+          (schema_type
             (dotted_name
-                (identifier))))
+              (identifier))))
         (string
-            (string_start)
-            (string_content)
-            (string_end)))))
-    (assignment
+          (string_start)
+          (string_content)
+          (string_end)))))
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (schema_expr
-        (identifier)
-        (dict_expr
-        (pair
-            (attribute
-                (identifier))
+      (identifier)
+      (config_expr
+        (config_entries
+          (config_entry
+            (identifier)
             (string
-            (string_start)
-            (string_content)
-            (string_end)))))))
-
+              (string_start)
+              (string_content)
+              (string_end))))))))
 
 ================================================================================
 Type Guards
@@ -343,75 +341,67 @@ elif typeof(data) == "Data2":
 --------------------------------------------------------------------------------
 
 (module
-    (schema_statement
+  (schema_stmt
     (identifier)
     (block
-        (optional_attribute_declaration
+      (optional_attribute_declaration
         (identifier)
         (type
-            (basic_type)))))
-    (schema_statement
+          (basic_type)))))
+  (schema_stmt
     (identifier)
     (block
-        (optional_attribute_declaration
+      (optional_attribute_declaration
         (identifier)
         (type
-            (basic_type)))))
-    (assignment
+          (basic_type)))))
+  (assign_stmt
     (dotted_name
-        (identifier))
+      (identifier))
     (type
-        (union_type
+      (union_type
         (type
-            (schema_type
+          (schema_type
             (dotted_name
-                (identifier))))
+              (identifier))))
         (type
-            (schema_type
+          (schema_type
             (dotted_name
-                (identifier))))))
+              (identifier))))))
     (schema_expr
+      (identifier)
+      (config_expr)))
+  (if_stmt
+    (comparison_expr
+      (call_expr
         (identifier)
-        (dict_expr)))
-    (if_statement
-    (comparison_operator
-        (call
-        (attribute
-            (identifier))
         (argument_list
-            (attribute
-            (identifier))))
-        (string
+          (identifier)))
+      (string
         (string_start)
         (string_content)
         (string_end)))
     (block
-        (assignment
+      (assign_stmt
         (dotted_name
-            (identifier))
-        (as_expression
-            (attribute
-            (identifier))
-            (attribute
-            (identifier)))))
+          (identifier))
+        (as_expr
+          (identifier)
+          (identifier))))
     (elif_clause
-        (comparison_operator
-        (call
-            (attribute
-            (identifier))
-            (argument_list
-            (attribute
-                (identifier))))
+      (comparison_expr
+        (call_expr
+          (identifier)
+          (argument_list
+            (identifier)))
         (string
-            (string_start)
-            (string_content)
-            (string_end)))
-        (block
-        (assignment
-            (dotted_name
+          (string_start)
+          (string_content)
+          (string_end)))
+      (block
+        (assign_stmt
+          (dotted_name
             (identifier))
-            (as_expression
-            (attribute
-                (identifier))
-            (attribute
-                (identifier))))))))
+          (as_expr
+            (identifier)
+            (identifier)))))))

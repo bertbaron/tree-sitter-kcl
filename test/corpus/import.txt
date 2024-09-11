@@ -7,7 +7,7 @@ import k8s.api
 --------------------------------------------------------------------------------
 
 (module
-  (import_statement
+  (import_stmt
     (dotted_name
       (identifier)
       (identifier))))
@@ -21,7 +21,7 @@ import ..local.api
 --------------------------------------------------------------------------------
 
 (module
-  (import_statement
+  (import_stmt
     (import_prefix)
     (dotted_name
       (identifier)
@@ -36,12 +36,11 @@ import k8s.api as k8s
 --------------------------------------------------------------------------------
 
 (module
-  (import_statement
-    (aliased_import
-      (dotted_name
-        (identifier)
-        (identifier))
-      (identifier))))
+  (import_stmt
+    (dotted_name
+      (identifier)
+      (identifier))
+    (identifier)))
 
 ================================================================================
 import statements with as name and leading dots
@@ -52,13 +51,12 @@ import ..local.api as local
 --------------------------------------------------------------------------------
 
 (module
-  (import_statement
+  (import_stmt
     (import_prefix)
-    (aliased_import
-      (dotted_name
-        (identifier)
-        (identifier))
-      (identifier))))
+    (dotted_name
+      (identifier)
+      (identifier))
+    (identifier)))
 
 ================================================================================
 import statements with multiple files
@@ -70,26 +68,23 @@ a = pkg1.foo + pkg1.bar + pkg1.baz
 --------------------------------------------------------------------------------
 
 (module
-  (import_statement
+  (import_stmt
     (dotted_name
       (identifier)))
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (selector_expression
-      (binary_operator
-        (selector_expression
-          (binary_operator
-            (selector_expression
-              (attribute
-                (identifier))
-              (select_suffix
-                (identifier)))
-            (attribute
-              (identifier)))
+    (binary_expr
+      (binary_expr
+        (selector_expr
+          (identifier)
           (select_suffix
             (identifier)))
-        (attribute
-          (identifier)))
-      (select_suffix
-        (identifier)))))
+        (selector_expr
+          (identifier)
+          (select_suffix
+            (identifier))))
+      (selector_expr
+        (identifier)
+        (select_suffix
+          (identifier))))))

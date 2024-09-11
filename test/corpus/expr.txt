@@ -7,11 +7,11 @@ binary expression
 --------------------------------------------------------------------------------
 
 (module
-  (binary_operator
-    (binary_operator
+  (binary_expr
+    (binary_expr
       (integer)
       (integer))
-    (binary_operator
+    (binary_expr
       (integer)
       (integer))))
 
@@ -24,7 +24,7 @@ unary expression
 --------------------------------------------------------------------------------
 
 (module
-  (unary_operator
+  (unary_expr
     (integer)))
 
 ================================================================================
@@ -36,12 +36,12 @@ Index expression
 --------------------------------------------------------------------------------
 
 (module
-    (subscript
-      (string
-        (string_start)
-        (string_content)
-        (string_end))
-      (integer)))
+  (subscript_expr
+    (string
+      (string_start)
+      (string_content)
+      (string_end))
+    (integer)))
 
 ================================================================================
 slice expression
@@ -52,14 +52,14 @@ slice expression
 --------------------------------------------------------------------------------
 
 (module
-    (subscript
-      (string
-        (string_start)
-        (string_content)
-        (string_end))
-      (slice
-        (integer)
-        (integer))))
+  (subscript_expr
+    (string
+      (string_start)
+      (string_content)
+      (string_end))
+    (slice
+      (integer)
+      (integer))))
 
 ================================================================================
 conditional expression
@@ -70,13 +70,12 @@ x = True if enabled else False
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (conditional_expression
+    (if_expr
       (true)
-      (attribute
-        (identifier))
+      (identifier)
       (false))))
 
 ================================================================================
@@ -88,22 +87,21 @@ print("hello world", end="")
 --------------------------------------------------------------------------------
 
 (module
-    (call
-      (attribute
-        (identifier))
-      (argument_list
+  (call_expr
+    (identifier)
+    (argument_list
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (keyword_argument
+        (identifier)
         (string
           (string_start)
-          (string_content)
-          (string_end))
-        (keyword_argument
-          (identifier)
-          (string
-            (string_start)
-            (string_end))))))
+          (string_end))))))
 
 ================================================================================
-Comprehensions
+List comprehensions
 ================================================================================
 
 [x * x for x in range(5)] 
@@ -111,19 +109,35 @@ Comprehensions
 --------------------------------------------------------------------------------
 
 (module
-      (list_comprehension
-        (binary_operator
-          (attribute
-            (identifier))
-          (attribute
-            (identifier)))
-        (for_in_clause
-          (identifier)
-            (call
-              (attribute
-                (identifier))
-              (argument_list
-                (integer))))))
+  (list_comprehension
+    (binary_expr
+      (identifier)
+      (identifier))
+    (for_in_clause
+      (identifier)
+      (call_expr
+        (identifier)
+        (argument_list
+          (integer))))))
+
+================================================================================
+Dict comprehensions
+================================================================================
+
+{x: 1 for x in range(5)}
+
+--------------------------------------------------------------------------------
+
+(module
+  (config_comprehension
+    (identifier)
+    (integer)
+    (for_in_clause
+      (identifier)
+      (call_expr
+        (identifier)
+        (argument_list
+          (integer))))))
 
 ================================================================================
 selector expression
@@ -135,25 +149,24 @@ result = myDict.key
 --------------------------------------------------------------------------------
 
 (module
-      (assignment
-        (dotted_name
-          (identifier))
-        (dictionary
-          (pair
-            (attribute
-              (identifier))
-            (string
-              (string_start)
-              (string_content)
-              (string_end)))))
-      (assignment
-        (dotted_name
-          (identifier))
-        (selector_expression
-          (attribute
-            (identifier))
-          (select_suffix
-            (identifier)))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (config_expr
+      (config_entries
+        (config_entry
+          (identifier)
+          (string
+            (string_start)
+            (string_content)
+            (string_end))))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (selector_expr
+      (identifier)
+      (select_suffix
+        (identifier)))))
 
 ================================================================================
 selector expression with ? operator
@@ -162,35 +175,91 @@ selector expression with ? operator
 data = {key = "value"}
 a = data?.key     
 b = data?.name
+c = data?.name + "value"
+d = data.name == "NONE" + " " + "ok"
+
+e = data?.name == "TRUE" if True else "None"
 
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (dictionary
-      (pair
-        (attribute
-          (identifier))
+    (config_expr
+      (config_entries
+        (config_entry
+          (identifier)
+          (string
+            (string_start)
+            (string_content)
+            (string_end))))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (selector_expr
+      (identifier)
+      (select_suffix
+        (identifier))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (selector_expr
+      (identifier)
+      (select_suffix
+        (identifier))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (binary_expr
+      (selector_expr
+        (identifier)
+        (select_suffix
+          (identifier)))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (binary_expr
+      (binary_expr
+        (comparison_expr
+          (selector_expr
+            (identifier)
+            (select_suffix
+              (identifier)))
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))
         (string
           (string_start)
           (string_content)
-          (string_end)))))
-  (assignment
+          (string_end)))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))))
+  (assign_stmt
     (dotted_name
       (identifier))
-    (optional_attribute
-      (attribute
-        (identifier))
-      (identifier)))
-  (assignment
-    (dotted_name
-      (identifier))
-    (optional_attribute
-      (attribute
-        (identifier))
-          (identifier))))
+    (if_expr
+      (comparison_expr
+        (selector_expr
+          (identifier)
+          (select_suffix
+            (identifier)))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (true)
+      (string
+        (string_start)
+        (string_content)
+        (string_end)))))
 
 ================================================================================
 attribute expression
@@ -204,35 +273,34 @@ name1 = person.name
 
 --------------------------------------------------------------------------------
 
- (module
-      (schema_statement
-        (identifier)
-        (block
-          (assignment
-            (dotted_name
-              (identifier))
-            (basic_type))))
-      (assignment
+(module
+  (schema_stmt
+    (identifier)
+    (block
+      (assign_stmt
         (dotted_name
           (identifier))
-        (schema_expr
-          (identifier)
-          (dict_expr
-            (pair
-              (attribute
-                (identifier))
-              (string
-                (string_start)
-                (string_content)
-                (string_end))))))
-      (assignment
-        (dotted_name
-          (identifier))
-        (selector_expression
-          (attribute
-            (identifier))
-          (select_suffix
-            (identifier)))))
+        (basic_type))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (schema_expr
+      (identifier)
+      (config_expr
+        (config_entries
+          (config_entry
+            (identifier)
+            (string
+              (string_start)
+              (string_content)
+              (string_end)))))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (selector_expr
+      (identifier)
+      (select_suffix
+        (identifier)))))
 
 ================================================================================
 optional attribute expression
@@ -247,33 +315,33 @@ name2 = person?.name
 --------------------------------------------------------------------------------
 
 (module
-      (schema_statement
-        (identifier)
-        (block
-          (assignment
-            (dotted_name
-              (identifier))
-            (basic_type))))
-      (assignment
+  (schema_stmt
+    (identifier)
+    (block
+      (assign_stmt
         (dotted_name
           (identifier))
-        (schema_expr
-          (identifier)
-          (dict_expr
-            (pair
-              (attribute
-                (identifier))
-              (string
-                (string_start)
-                (string_content)
-                (string_end))))))
-      (assignment
-        (dotted_name
-          (identifier))
-        (optional_attribute
-          (attribute
-            (identifier))
-          (identifier))))
+        (basic_type))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (schema_expr
+      (identifier)
+      (config_expr
+        (config_entries
+          (config_entry
+            (identifier)
+            (string
+              (string_start)
+              (string_content)
+              (string_end)))))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (selector_expr
+      (identifier)
+      (select_suffix
+        (identifier)))))
 
 ================================================================================
 optional item expression
@@ -285,21 +353,20 @@ item = datalist?[0]
 --------------------------------------------------------------------------------
 
 (module
-      (assignment
-        (dotted_name
-          (identifier))
-        (list
-          (list
-            (integer))
-          (integer)
-          (integer)))
-      (assignment
-        (dotted_name
-          (identifier))
-        (optional_item
-          (attribute
-            (identifier))
-          (integer))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (list_expr
+      (list_expr
+        (integer))
+      (integer)
+      (integer)))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (subscript_expr
+      (identifier)
+      (integer))))
 
 ================================================================================
 null coalesce expression
@@ -311,40 +378,41 @@ name3 = data["name"] or "name3_value"
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (dictionary
-      (pair
-        (string
-          (string_start)
-          (string_content)
-          (string_end))
-        (dictionary
-          (pair
-            (string
-              (string_start)
-              (string_content)
-              (string_end))
-            (string
-              (string_start)
-              (string_content)
-              (string_end)))))))
-      (assignment
-        (dotted_name
-          (identifier))
-        (boolean_operator
-          (subscript
-            (attribute
-             (identifier))
-            (string
-              (string_start)
-              (string_content)
-              (string_end)))
+    (config_expr
+      (config_entries
+        (config_entry
           (string
             (string_start)
             (string_content)
-            (string_end)))))
+            (string_end))
+          (config_expr
+            (config_entries
+              (config_entry
+                (string
+                  (string_start)
+                  (string_content)
+                  (string_end))
+                (string
+                  (string_start)
+                  (string_content)
+                  (string_end)))))))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (subscript_expr
+        (identifier)
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (string
+        (string_start)
+        (string_content)
+        (string_end)))))
 
 ================================================================================
 paren expression
@@ -355,15 +423,12 @@ paren expression
 --------------------------------------------------------------------------------
 
 (module
-  (binary_operator
-    (paren_expression
-      (binary_operator
-        (attribute
-          (identifier))
-        (attribute
-          (identifier))))
-    (attribute
-      (identifier))))
+  (binary_expr
+    (paren_expr
+      (binary_expr
+        (identifier)
+        (identifier)))
+    (identifier)))
 
 ================================================================================
 boolean expression with 'and' operator
@@ -374,10 +439,10 @@ x = True and False
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (boolean_operator
+    (comparison_expr
       (true)
       (false))))
 
@@ -390,10 +455,10 @@ y = True or False
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (boolean_operator
+    (comparison_expr
       (true)
       (false))))
 
@@ -406,10 +471,10 @@ x = not True
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (not_operator
+    (unary_expr
       (true))))
 
 ================================================================================
@@ -421,17 +486,17 @@ y = not (1 == 2)
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (not_operator
-      (paren_expression
-        (comparison_operator
+    (unary_expr
+      (paren_expr
+        (comparison_expr
           (integer)
           (integer))))))
 
 ================================================================================
-lambda expression 
+lambda expression
 ================================================================================
 
 g = lambda x: str, y: int -> int { 
@@ -441,7 +506,7 @@ g = lambda x: str, y: int -> int {
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
     (lambda_expr
@@ -456,11 +521,9 @@ g = lambda x: str, y: int -> int {
       (type
         (basic_type))
       (block
-        (binary_operator
-          (attribute
-            (identifier))
-          (attribute
-            (identifier)))))))
+        (binary_expr
+          (identifier)
+          (identifier))))))
 
 ================================================================================
 Sequence operations
@@ -478,45 +541,13 @@ max(["gg","eggs"])
 --------------------------------------------------------------------------------
 
 (module
-  (sequence_operation
-    (in_operation
-      (list
-        (string
-          (string_start)
-          (string_content)
-          (string_end)))
-      (list
-        (string
-          (string_start)
-          (string_content)
-          (string_end))
-        (string
-          (string_start)
-          (string_content)
-          (string_end)))))
-  (sequence_operation
-    (not_in_operation
-      (list
-        (string
-          (string_start)
-          (string_content)
-          (string_end)))
-      (list
-        (string
-          (string_start)
-          (string_content)
-          (string_end))
-        (string
-          (string_start)
-          (string_content)
-          (string_end)))))
-  (binary_operator
-    (list
+  (comparison_expr
+    (list_expr
       (string
         (string_start)
         (string_content)
         (string_end)))
-    (list
+    (list_expr
       (string
         (string_start)
         (string_content)
@@ -525,8 +556,38 @@ max(["gg","eggs"])
         (string_start)
         (string_content)
         (string_end))))
-  (subscript
-    (list
+  (comparison_expr
+    (list_expr
+      (string
+        (string_start)
+        (string_content)
+        (string_end)))
+    (list_expr
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))))
+  (binary_expr
+    (list_expr
+      (string
+        (string_start)
+        (string_content)
+        (string_end)))
+    (list_expr
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))))
+  (subscript_expr
+    (list_expr
       (string
         (string_start)
         (string_content)
@@ -540,8 +601,8 @@ max(["gg","eggs"])
         (string_content)
         (string_end)))
     (integer))
-  (subscript
-    (list
+  (subscript_expr
+    (list_expr
       (string
         (string_start)
         (string_content)
@@ -557,8 +618,8 @@ max(["gg","eggs"])
     (slice
       (integer)
       (integer)))
-  (subscript
-    (list
+  (subscript_expr
+    (list_expr
       (string
         (string_start)
         (string_content)
@@ -579,11 +640,10 @@ max(["gg","eggs"])
       (integer)
       (integer)
       (integer)))
-  (call
-    (attribute
-      (identifier))
+  (call_expr
+    (identifier)
     (argument_list
-      (list
+      (list_expr
         (string
           (string_start)
           (string_content)
@@ -592,11 +652,10 @@ max(["gg","eggs"])
           (string_start)
           (string_content)
           (string_end)))))
-  (call
-    (attribute
-      (identifier))
+  (call_expr
+    (identifier)
     (argument_list
-      (list
+      (list_expr
         (string
           (string_start)
           (string_content)
@@ -624,100 +683,97 @@ j = y is not None
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (comparison_operator
-          (integer)
-          (integer)))
-      (assignment
-        (dotted_name
-          (identifier))
-        (comparison_operator
-          (string
-            (string_start)
-            (string_content)
-            (string_end))
-          (string
-            (string_start)
-            (string_content)
-            (string_end))))
-      (assignment
-        (dotted_name
-          (identifier))
-        (comparison_operator
-          (float)
-          (float)))
-      (assignment
-        (dotted_name
-          (identifier))
-          (comparison_operator
-          (string
-            (string_start)
-            (string_content)
-            (string_end))
-          (string
-            (string_start)
-            (string_content)
-            (string_end))))
-      (assignment
-        (dotted_name
-          (identifier))
-      (comparison_operator
-          (integer)
-          (integer)))
-      (assignment
-        (dotted_name
-          (identifier))
-      (comparison_operator
-          (integer)
-          (integer)))
-      (assignment
-        (dotted_name
-          (identifier))
-      (comparison_operator
-          (attribute
-            (identifier))
-          (list
-            (integer)
-            (integer)
-            (integer))))
-      (assignment
-        (dotted_name
-          (identifier))
-      (comparison_operator
-          (attribute
-            (identifier))
-          (list
-            (string
-              (string_start)
-              (string_content)
-              (string_end))
-            (string
-              (string_start)
-              (string_content)
-              (string_end))
-            (string
-              (string_start)
-              (string_content)
-              (string_end)))))
-      (assignment
-        (dotted_name
-          (identifier))
-        (comparison_operator
-          (attribute
-            (identifier))
-          (none)))
-      (assignment
-        (dotted_name
-          (identifier))
-        (comparison_operator
-          (attribute
-            (identifier))
-          (none))))
+    (comparison_expr
+      (integer)
+      (integer)))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (float)
+      (float)))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (string
+        (string_start)
+        (string_content)
+        (string_end))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (integer)
+      (integer)))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (integer)
+      (integer)))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (identifier)
+      (list_expr
+        (integer)
+        (integer)
+        (integer))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (identifier)
+      (list_expr
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (identifier)
+      (none)))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (comparison_expr
+      (identifier)
+      (unary_expr
+        (none)))))
 
 ================================================================================
-Smoke expression 
+Smoke expression
 ================================================================================
 
 "\"1\"\n"
@@ -743,32 +799,26 @@ r = not x
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
-    (binary_operator
-      (paren_expression
-        (binary_operator
-          (attribute
-            (identifier))
-          (attribute
-            (identifier))))
-      (attribute
-        (identifier))))
-  (assignment
+    (binary_expr
+      (paren_expr
+        (binary_expr
+          (identifier)
+          (identifier)))
+      (identifier)))
+  (assign_stmt
     (dotted_name
       (identifier))
-    (boolean_operator
-      (attribute
-        (identifier))
-      (attribute
-        (identifier))))
-  (assignment
+    (comparison_expr
+      (identifier)
+      (identifier)))
+  (assign_stmt
     (dotted_name
       (identifier))
-    (not_operator
-      (attribute
-        (identifier)))))
+    (unary_expr
+      (identifier))))
 
 ================================================================================
 String literal expressions
@@ -790,8 +840,8 @@ Number bin suffix expressions
 1234Ki
 --------------------------------------------------------------------------------
 
-  (module
-      (integer))
+(module
+  (integer))
 
 ================================================================================
 Config expressions
@@ -806,31 +856,33 @@ Config expressions
 --------------------------------------------------------------------------------
 
 (module
-  (dictionary
-    (pair
-      (string
-        (string_start)
-        (string_content)
-        (string_end))
-      (dictionary
-        (pair
-          (string
-            (string_start)
-            (string_content)
-            (string_end))
-          (string
-            (string_start)
-            (string_content)
-            (string_end)))))
-    (pair
-      (string
-        (string_start)
-        (string_content)
-        (string_end))
-      (string
-        (string_start)
-        (string_content)
-        (string_end)))))
+  (config_expr
+    (config_entries
+      (config_entry
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (config_expr
+          (config_entries
+            (config_entry
+              (string
+                (string_start)
+                (string_content)
+                (string_end))
+              (string
+                (string_start)
+                (string_content)
+                (string_end))))))
+      (config_entry
+        (string
+          (string_start)
+          (string_content)
+          (string_end))
+        (string
+          (string_start)
+          (string_content)
+          (string_end))))))
 
 ================================================================================
 Bracket expressions
@@ -840,8 +892,8 @@ Bracket expressions
 --------------------------------------------------------------------------------
 
 (module
-  (list
-    (binary_operator
+  (list_expr
+    (binary_expr
       (integer)
       (integer))))
 
@@ -853,11 +905,11 @@ Braces expressions
 --------------------------------------------------------------------------------
 
 (module
-  (dictionary
-    (pair
-      (attribute
-        (identifier))
-      (integer))))
+  (config_expr
+    (config_entries
+      (config_entry
+        (identifier)
+        (integer)))))
 
 ================================================================================
 quantifier map expression
@@ -868,7 +920,7 @@ b = map k, v in {a = "foo", b = "bar"} { v }
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
     (quant_expr
@@ -876,23 +928,21 @@ b = map k, v in {a = "foo", b = "bar"} { v }
       (identifier)
       (identifier)
       (quant_target
-        (dictionary
-          (pair
-            (attribute
-              (identifier))
-            (string
-              (string_start)
-              (string_content)
-              (string_end)))
-          (pair
-            (attribute
-              (identifier))
-            (string
-              (string_start)
-              (string_content)
-              (string_end)))))
-      (attribute
-        (identifier)))))
+        (config_expr
+          (config_entries
+            (config_entry
+              (identifier)
+              (string
+                (string_start)
+                (string_content)
+                (string_end)))
+            (config_entry
+              (identifier)
+              (string
+                (string_start)
+                (string_content)
+                (string_end))))))
+      (identifier))))
 
 ================================================================================
 quantifier filter expression
@@ -903,7 +953,7 @@ d = filter _, v in {a = "foo", b = "bar"} {v == "foo"}
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
     (quant_expr
@@ -911,28 +961,26 @@ d = filter _, v in {a = "foo", b = "bar"} {v == "foo"}
       (identifier)
       (identifier)
       (quant_target
-        (dictionary
-          (pair
-            (attribute
-              (identifier))
-            (string
-              (string_start)
-              (string_content)
-              (string_end)))
-          (pair
-            (attribute
-              (identifier))
-            (string
-              (string_start)
-              (string_content)
-              (string_end)))))
-          (comparison_operator
-            (attribute
-              (identifier))
-            (string
-              (string_start)
-              (string_content)
-              (string_end))))))
+        (config_expr
+          (config_entries
+            (config_entry
+              (identifier)
+              (string
+                (string_start)
+                (string_content)
+                (string_end)))
+            (config_entry
+              (identifier)
+              (string
+                (string_start)
+                (string_content)
+                (string_end))))))
+      (comparison_expr
+        (identifier)
+        (string
+          (string_start)
+          (string_content)
+          (string_end))))))
 
 ================================================================================
 quantifier Any expression
@@ -949,10 +997,10 @@ schema Config:
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (block
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (list_type
@@ -960,19 +1008,18 @@ schema Config:
             (dict_type
               (type
                 (basic_type))))))
-      (check_statement
+      (check_stmt
         (quant_expr
           (quant_op)
           (identifier)
           (quant_target
             (identifier))
-          (comparison_operator
-            (selector_expression
-              (attribute
-                (identifier))
+          (comparison_expr
+            (selector_expr
+              (identifier)
               (select_suffix
                 (identifier)))
-            (list
+            (list_expr
               (string
                 (string_start)
                 (string_content)

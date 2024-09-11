@@ -19,5 +19,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 19
-      - run: npm install
-      - run: npm test
+      - name: Install rust nightly toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.79
+          override: true
+          components: clippy, rustfmt
+      - name: Install Tree sitter CLI
+        run: cargo install tree-sitter-cli
+      - name: Install dependencies
+        run: npm install
+      - name: Tree sitter generate parser and run grammar tests
+        run: tree-sitter g && tree-sitter t -u

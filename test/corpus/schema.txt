@@ -8,18 +8,18 @@ schema Person:
 --------------------------------------------------------------------------------
 
 (module
-    (schema_statement
+  (schema_stmt
     (identifier)
     (block
-        (assignment
+      (assign_stmt
         (dotted_name
-            (identifier))
+          (identifier))
         (type
-            (basic_type))
+          (basic_type))
         (string
-            (string_start)
-            (string_content)
-            (string_end))))))
+          (string_start)
+          (string_content)
+          (string_end))))))
 
 ================================================================================
 Protocol Statement
@@ -31,13 +31,13 @@ protocol DataProtocol:
 --------------------------------------------------------------------------------
 
 (module
-      (protocol_statement
-        (identifier)
-        (block
-          (assignment
-            (dotted_name
-              (identifier))
-            (basic_type)))))
+  (protocol_stmt
+    (identifier)
+    (block
+      (assign_stmt
+        (dotted_name
+          (identifier))
+        (basic_type)))))
 
 ================================================================================
 Rule Statement
@@ -49,13 +49,12 @@ rule SomeRule:
 --------------------------------------------------------------------------------
 
 (module
-  (rule_statement
+  (rule_stmt
     (identifier)
     (block
-      (if_rule_statement
-        (comparison_operator
-          (attribute
-            (identifier))
+      (if_stmt
+        (comparison_expr
+          (identifier)
           (integer))
         (string
           (string_start)
@@ -79,69 +78,68 @@ schema Config:
         }
 
 --------------------------------------------------------------------------------
+
 (module
-      (schema_statement
-        (identifier)
-        (block
-          (assignment
-            (dotted_name
-              (identifier))
-            (list_type
+  (schema_stmt
+    (identifier)
+    (block
+      (assign_stmt
+        (dotted_name
+          (identifier))
+        (list_type
+          (type
+            (dict_type
               (type
-                (dict_type
-                  (type
-                    (basic_type))))))
-          (assignment
-            (dotted_name
-              (identifier))
-            (list_type
+                (basic_type))))))
+      (assign_stmt
+        (dotted_name
+          (identifier))
+        (list_type
+          (type
+            (dict_type
               (type
-                (dict_type
-                  (type
-                    (basic_type))))))
-          (check_statement
-            (quant_expr
-              (quant_op)
+                (basic_type))))))
+      (check_stmt
+        (quant_expr
+          (quant_op)
+          (identifier)
+          (quant_target
+            (identifier))
+          (comparison_expr
+            (selector_expr
               (identifier)
-              (quant_target
-                (identifier))
-              (comparison_operator
-                (selector_expression
-                  (attribute
-                    (identifier))
-                  (select_suffix
-                    (identifier)))
-                (string
-                  (string_start)
-                  (string_content)
-                  (string_end))))
+              (select_suffix
+                (identifier)))
             (string
               (string_start)
               (string_content)
-              (string_end)))
-          (quant_expr
-            (quant_op)
+              (string_end))))
+        (string
+          (string_start)
+          (string_content)
+          (string_end)))
+      (quant_expr
+        (quant_op)
+        (identifier)
+        (quant_target
+          (identifier))
+        (comparison_expr
+          (selector_expr
             (identifier)
-            (quant_target
-              (identifier))
-            (comparison_operator
-              (selector_expression
-                (attribute
-                  (identifier))
-                (select_suffix
-                  (identifier)))
-              (list
-                (string
-                  (string_start)
-                  (string_content)
-                  (string_end))
-                (string
-                  (string_start)
-                  (string_content)
-                  (string_end))))))))
+            (select_suffix
+              (identifier)))
+          (list_expr
+            (string
+              (string_start)
+              (string_content)
+              (string_end))
+            (string
+              (string_start)
+              (string_content)
+              (string_end))))))))
 
 ================================================================================
-Decorated of a Schema
+Decorated of a schema
 ================================================================================
 
 @deprecated
@@ -151,14 +149,13 @@ schema ObsoleteSchema:
 --------------------------------------------------------------------------------
 
 (module
-  (decorated_definition
+  (decorators
     (decorator
-      (attribute
-        (identifier)))
-    (schema_statement
+      (identifier))
+    (schema_stmt
       (identifier)
       (block
-        (assignment
+        (assign_stmt
           (dotted_name
             (identifier))
           (basic_type))))))
@@ -172,15 +169,14 @@ personA = Person() {}
 --------------------------------------------------------------------------------
 
 (module
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
     (schema_instantiation
-      (call
-        (attribute
-          (identifier))
+      (call_expr
+        (identifier)
         (argument_list))
-      (dictionary))))
+      (config_expr))))
 
 ================================================================================
 Unification Statement
@@ -191,19 +187,19 @@ personInstance : Person {name: "Alice"}
 --------------------------------------------------------------------------------
 
 (module
-  (unification
+  (unification_stmt
     (dotted_name
       (identifier))
     (schema_expr
       (identifier)
-      (dict_expr
-        (pair
-          (attribute
-            (identifier))
-          (string
-            (string_start)
-            (string_content)
-            (string_end)))))))
+      (config_expr
+        (config_entries
+          (config_entry
+            (identifier)
+            (string
+              (string_start)
+              (string_content)
+              (string_end))))))))
 
 ================================================================================
 Schema Index Signature
@@ -218,7 +214,7 @@ schema Map:
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (block
       (string
@@ -248,7 +244,7 @@ data = Data {
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (block
       (schema_index_signature
@@ -256,11 +252,10 @@ data = Data {
         (basic_type)
         (type
           (basic_type)))
-      (check_statement
-        (comparison_operator
-          (attribute
-            (identifier))
-          (list
+      (check_stmt
+        (comparison_expr
+          (identifier)
+          (list_expr
             (string
               (string_start)
               (string_content)
@@ -269,26 +264,25 @@ data = Data {
               (string_start)
               (string_content)
               (string_end)))))))
-  (assignment
+  (assign_stmt
     (dotted_name
       (identifier))
     (schema_expr
       (identifier)
-      (dict_expr
-        (pair
-          (attribute
-            (identifier))
-          (string
-            (string_start)
-            (string_content)
-            (string_end)))
-        (pair
-          (attribute
-            (identifier))
-          (string
-            (string_start)
-            (string_content)
-            (string_end)))))))
+      (config_expr
+        (config_entries
+          (config_entry
+            (identifier)
+            (string
+              (string_start)
+              (string_content)
+              (string_end)))
+          (config_entry
+            (identifier)
+            (string
+              (string_start)
+              (string_content)
+              (string_end))))))))
 
 ================================================================================
 Schema index signature attribute alias
@@ -302,7 +296,7 @@ schema Environment:
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (block
       (schema_index_signature
@@ -312,16 +306,11 @@ schema Environment:
           (schema_type
             (dotted_name
               (identifier))))
-        (test
-          (config_expr
-            (config_entries
-              (config_entry
-                (test
-                  (dotted_name
-                    (identifier)))
-                (test
-                  (dotted_name
-                    (identifier)))))))))))
+        (config_expr
+          (config_entries
+            (config_entry
+              (identifier)
+              (identifier))))))))
 
 ================================================================================
 Schema index signature attribute alias
@@ -334,15 +323,15 @@ schema employee(person):
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (identifier)
     (block
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (basic_type))
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (basic_type)))))
@@ -361,14 +350,13 @@ rule SomeChecker for SomeProtocol:
 --------------------------------------------------------------------------------
 
 (module
-  (rule_statement
+  (rule_stmt
     (identifier)
     (identifier)
     (block
-      (if_rule_statement
-        (comparison_operator
-          (attribute
-            (identifier))
+      (if_stmt
+        (comparison_expr
+          (identifier)
           (integer))
         (string
           (string_start)
@@ -379,22 +367,19 @@ rule SomeChecker for SomeProtocol:
         (identifier)
         (quant_target
           (identifier))
-        (comparison_operator
-          (selector_expression
-            (attribute
-              (identifier))
+        (comparison_expr
+          (selector_expr
+            (identifier)
             (select_suffix
               (identifier)))
-          (selector_expression
-            (conditional_expression
-              (string
-                (string_start)
-                (string_content)
-                (string_end))
-              (attribute
-                (identifier)))
-            (select_suffix
-              (identifier))))))))
+          (string
+            (string_start)
+            (string_content)
+            (string_end)))
+        (selector_expr
+          (identifier)
+          (select_suffix
+            (identifier)))))))
 
 ================================================================================
 Schema Mixin Statement
@@ -407,14 +392,13 @@ schema Parent:
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (block
-      (mixin_statement
-        (list
-          (attribute
-            (identifier))))
-      (assignment
+      (mixin_stmt
+        (list_expr
+          (identifier)))
+      (assign_stmt
         (dotted_name
           (identifier))
         (basic_type)))))
@@ -430,12 +414,11 @@ schema NameMixin:
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (block
-      (check_statement
-        (attribute
-          (identifier)))
+      (check_stmt
+        (identifier))
       (none))))
 
 ================================================================================
@@ -448,17 +431,16 @@ schema Data for DataProtocol:
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (identifier)
     (block
-      (assignment
+      (assign_stmt
         (dotted_name
           (identifier))
         (type
           (basic_type))
-        (attribute
-          (identifier))))))
+        (identifier)))))
 
 ================================================================================
 schema config
@@ -471,7 +453,7 @@ schema Config:
 --------------------------------------------------------------------------------
 
 (module
-  (schema_statement
+  (schema_stmt
     (identifier)
     (block
       (optional_attribute_declaration
@@ -502,14 +484,13 @@ rule SomeChecker for SomeProtocol:
 --------------------------------------------------------------------------------
 
 (module
-  (rule_statement
+  (rule_stmt
     (identifier)
     (identifier)
     (block
-      (if_rule_statement
-        (comparison_operator
-          (attribute
-            (identifier))
+      (if_stmt
+        (comparison_expr
+          (identifier)
           (integer))
         (string
           (string_start)
@@ -520,13 +501,12 @@ rule SomeChecker for SomeProtocol:
         (identifier)
         (quant_target
           (identifier))
-        (comparison_operator
-          (selector_expression
-            (attribute
-              (identifier))
+        (comparison_expr
+          (selector_expr
+            (identifier)
             (select_suffix
               (identifier)))
-          (list
+          (list_expr
             (string
               (string_start)
               (string_content)
@@ -566,71 +546,53 @@ SomeChecker {
 (module
   (schema_expr
     (identifier)
-    (dict_expr
-      (pair
-        (attribute
-          (identifier))
-        (integer))
-      (pair
-        (attribute
-          (identifier))
-        (config_expr
-          (config_entries
-            (config_entry
-              (test
-                (dotted_name
-                  (identifier)))
-              (test
+    (config_expr
+      (config_entries
+        (config_entry
+          (identifier)
+          (integer))
+        (config_entry
+          (identifier)
+          (config_expr
+            (config_entries
+              (config_entry
+                (identifier)
                 (string
                   (string_start)
                   (string_content)
-                  (string_end)))))))
-      (pair
-        (attribute
-          (identifier))
-        (list
-          (config_expr
-            (config_entries
-              (config_entry
-                (test
-                  (dotted_name
-                    (identifier)))
-                (test
+                  (string_end))))))
+        (config_entry
+          (identifier)
+          (list_expr
+            (config_expr
+              (config_entries
+                (config_entry
+                  (identifier)
                   (string
                     (string_start)
                     (string_content)
-                    (string_end))))
-              (config_entry
-                (test
-                  (dotted_name
-                    (identifier)))
-                (test
+                    (string_end)))
+                (config_entry
+                  (identifier)
                   (string
                     (string_start)
                     (string_content)
-                    (string_end))))))))
-      (pair
-        (attribute
-          (identifier))
-        (list
-          (config_expr
-            (config_entries
-              (config_entry
-                (test
-                  (dotted_name
-                    (identifier)))
-                (test
+                    (string_end)))))))
+        (config_entry
+          (identifier)
+          (list_expr
+            (config_expr
+              (config_entries
+                (config_entry
+                  (identifier)
                   (string
                     (string_start)
                     (string_content)
-                    (string_end))))))
-          (config_expr
-            (config_entries
-              (config_entry
-                (test
-                  (dotted_name
-                    (identifier)))
-                (test
+                    (string_end)))))
+            (config_expr
+              (config_entries
+                (config_entry
+                  (identifier)
                   (string
                     (string_start)
                     (string_content)
@@ -655,53 +617,46 @@ rule UserIsAdmin:
 --------------------------------------------------------------------------------
 
 (module
-  (rule_statement
+  (rule_stmt
     (identifier)
     (block
-      (call
-        (attribute
-          (identifier))
+      (call_expr
+        (identifier)
         (argument_list))
       (quant_expr
         (quant_op)
         (identifier)
         (quant_target
-          (call
-            (attribute
-              (identifier))
+          (call_expr
+            (identifier)
             (argument_list)))
-        (comparison_operator
-          (selector_expression
-            (attribute
-              (identifier))
+        (comparison_expr
+          (selector_expr
+            (identifier)
             (select_suffix
               (identifier)))
-          (selector_expression
-            (attribute
-              (identifier))
+          (selector_expr
+            (identifier)
             (select_suffix
               (identifier)))))))
-  (rule_statement
+  (rule_stmt
     (identifier)
     (block
       (quant_expr
         (quant_op)
         (identifier)
         (quant_target
-          (subscript
-            (selector_expression
-              (attribute
-                (identifier))
+          (subscript_expr
+            (selector_expr
+              (identifier)
               (select_suffix
                 (identifier)))
-            (selector_expression
-              (attribute
-                (identifier))
+            (selector_expr
+              (identifier)
               (select_suffix
                 (identifier)))))
-        (comparison_operator
-          (attribute
-            (identifier))
+        (comparison_expr
+          (identifier)
           (string
             (string_start)
             (string_content)
@@ -713,7 +668,7 @@ schema with multiple keywords
 
 schema NameMixin:
     check:
-        name not None
+        name is not None
 
 schema Person:
     """
@@ -730,46 +685,45 @@ person = Person {
 
 --------------------------------------------------------------------------------
 
-  (module
-    (schema_statement
-      (identifier)
-      (block
-        (check_statement
-          (not_expression
-            (attribute
-              (identifier))
-            (none)))))
-    (schema_statement
-      (identifier)
-      (block
+(module
+  (schema_stmt
+    (identifier)
+    (block
+      (check_stmt
+        (comparison_expr
+          (identifier)
+          (unary_expr
+            (none))))))
+  (schema_stmt
+    (identifier)
+    (block
+      (string
+        (string_start)
+        (string_content)
+        (string_end))
+      (mixin_stmt
+        (list_expr
+          (identifier)))
+      (assign_stmt
+        (dotted_name
+          (identifier))
+        (type
+          (basic_type))
         (string
           (string_start)
           (string_content)
-          (string_end))
-        (mixin_statement
-          (list
-            (attribute
-              (identifier))))
-        (assignment
-          (dotted_name
-            (identifier))
-          (type
-            (basic_type))
-          (string
-            (string_start)
-            (string_content)
-            (string_end)))
-        (assignment
-          (dotted_name
-            (identifier))
-          (basic_type))))
-    (assignment
-      (dotted_name
-        (identifier))
-      (schema_expr
-        (identifier)
-        (dict_expr
-          (pair
-            (attribute
-              (identifier))
-            (integer))))))
+          (string_end)))
+      (assign_stmt
+        (dotted_name
+          (identifier))
+        (basic_type))))
+  (assign_stmt
+    (dotted_name
+      (identifier))
+    (schema_expr
+      (identifier)
+      (config_expr
+        (config_entries
+          (config_entry
+            (identifier)
+            (integer)))))))

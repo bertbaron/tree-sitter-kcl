@@ -19,7 +19,7 @@ npm install
 Change the grammar in [./grammar.js](./grammar.js) and run the build command
 
 ```shell
-npm run dev
+tree-sitter g
 ```
 
 ### Testing
@@ -27,8 +27,12 @@ npm run dev
 Add test suites in [./test/corpus/](./test/corpus/) and run the test command
 
 ```shell
-npm test
+tree-sitter t -u
 ```
+
+## Reference
+
++ [KCL Grammar](https://www.kcl-lang.io/docs/reference/lang/spec/kcl-spec#grammar)
 
 ## License
 

@@ -7,11 +7,10 @@ assert x > 1
 --------------------------------------------------------------------------------
 
 (module
-    (assert_statement
-    (comparison_operator
-        (attribute
-    (identifier))
-        (integer))))
+  (assert_stmt
+    (comparison_expr
+      (identifier)
+      (integer))))
 
 ================================================================================
 assert statements with error message
@@ -22,13 +21,33 @@ assert a == b, "SOS"
 --------------------------------------------------------------------------------
 
 (module
-      (assert_statement
-        (comparison_operator
-          (attribute
-            (identifier))
-          (attribute
-            (identifier)))
-        (string
-          (string_start)
-          (string_content)
-          (string_end))))
+  (assert_stmt
+    (comparison_expr
+      (identifier)
+      (identifier))
+    (string
+      (string_start)
+      (string_content)
+      (string_end))))
+
+================================================================================
+assert statements with if guard and error message
+================================================================================
+
+assert a == b if c is not None, "SOS"
+
+--------------------------------------------------------------------------------
+
+(module
+  (assert_stmt
+    (comparison_expr
+      (identifier)
+      (identifier))
+    (comparison_expr
+      (identifier)
+      (unary_expr
+        (none)))
+    (string
+      (string_start)
+      (string_content)
+      (string_end))))
