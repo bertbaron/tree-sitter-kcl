@@ -2,7 +2,7 @@
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkcl-lang%2Ftree-sitter-kcl.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkcl-lang%2Ftree-sitter-kcl?ref=badge_shield)
 
-A tree-sitter grammar for KCL
+A tree-sitter grammar for KCL. Please note that the project is still under development.
 
 ## Developing
 
