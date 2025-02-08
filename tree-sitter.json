@@ -10,7 +10,8 @@
         "k"
       ],
       "injection-regex": "^kcl$",
-      "class-name": "TreeSitterKcl"
+      "class-name": "TreeSitterKcl",
+      "highlights": "./queries/highlights.scm"
     }
   ],
   "metadata": {

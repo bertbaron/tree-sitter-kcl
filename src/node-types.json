@@ -1542,6 +1542,7 @@
   {
     "type": "module",
     "named": true,
+    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
@@ -2532,46 +2533,6 @@
     "named": false
   },
   {
-    "type": "G",
-    "named": false
-  },
-  {
-    "type": "Gi",
-    "named": false
-  },
-  {
-    "type": "K",
-    "named": false
-  },
-  {
-    "type": "Ki",
-    "named": false
-  },
-  {
-    "type": "M",
-    "named": false
-  },
-  {
-    "type": "Mi",
-    "named": false
-  },
-  {
-    "type": "P",
-    "named": false
-  },
-  {
-    "type": "Pi",
-    "named": false
-  },
-  {
-    "type": "T",
-    "named": false
-  },
-  {
-    "type": "Ti",
-    "named": false
-  },
-  {
     "type": "[",
     "named": false
   },
@@ -2649,11 +2610,11 @@
   },
   {
     "type": "float",
-    "named": true
+    "named": false
   },
   {
     "type": "float",
-    "named": false
+    "named": true
   },
   {
     "type": "for",
@@ -2692,10 +2653,6 @@
     "named": false
   },
   {
-    "type": "k",
-    "named": false
-  },
-  {
     "type": "lambda",
     "named": false
   },
@@ -2704,19 +2661,11 @@
     "named": true
   },
   {
-    "type": "m",
-    "named": false
-  },
-  {
     "type": "map",
     "named": false
   },
   {
     "type": "mixin",
-    "named": false
-  },
-  {
-    "type": "n",
     "named": false
   },
   {
@@ -2744,10 +2693,6 @@
     "named": false
   },
   {
-    "type": "raw_string_start",
-    "named": true
-  },
-  {
     "type": "rule",
     "named": false
   },
@@ -2773,10 +2718,6 @@
   },
   {
     "type": "type",
-    "named": false
-  },
-  {
-    "type": "u",
     "named": false
   },
   {
