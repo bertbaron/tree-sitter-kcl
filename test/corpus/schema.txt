@@ -382,6 +382,25 @@ rule SomeChecker for SomeProtocol:
             (identifier)))))))
 
 ================================================================================
+Rule Statement with inheritance
+================================================================================
+
+rule Main(IsSunny, IsWednesday):
+    id == 1
+
+--------------------------------------------------------------------------------
+
+(module
+  (rule_stmt
+    name: (identifier)
+    base: (identifier)
+    base: (identifier)
+    body: (block
+      (comparison_expr
+        (identifier)
+        (integer)))))
+
+================================================================================
 Schema Mixin Statement
 ================================================================================
 

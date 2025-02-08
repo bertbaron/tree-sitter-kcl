@@ -1824,6 +1824,16 @@
     "type": "rule_stmt",
     "named": true,
     "fields": {
+      "base": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "body": {
         "multiple": false,
         "required": true,
@@ -1847,7 +1857,7 @@
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "parameter",
             "named": true
           }
         ]

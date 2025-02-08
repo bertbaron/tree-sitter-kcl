@@ -296,7 +296,8 @@ module.exports = grammar({
       field('name', $.parameter),
       optional(seq(
         '(',
-        field('base', $.identifier),
+        commaSep1(field('base', $.identifier)),
+        optional(','),
         ')'
       )),
       optional(seq(
@@ -471,17 +472,6 @@ module.exports = grammar({
     protocol_stmt: $ => seq(
       'protocol',
       field('name', $.identifier),
-      ':',
-      field('body', $._suite),
-    ),
-
-    rule_stmt: $ => seq(
-      'rule',
-      field('name', $.identifier),
-      optional(seq(
-        'for',
-        field('protocol', $.identifier),
-      )),
       ':',
       field('body', $._suite),
     ),
