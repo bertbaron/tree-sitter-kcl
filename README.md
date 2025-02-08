@@ -24,7 +24,7 @@ tree-sitter g
 
 ### Testing
 
-Add test suites in [./test/corpus/](./test/corpus/) and run the test command
+Add test suites in [./test/corpus/](./test/corpus/) or [./test/highlight/](./test/highlight/) and run the test command
 
 ```shell
 tree-sitter t -u
