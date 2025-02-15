@@ -1054,6 +1054,11 @@
     }
   },
   {
+    "type": "format_spec",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "function_type",
     "named": true,
     "fields": {},
@@ -1269,6 +1274,48 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "interpolation",
+    "named": true,
+    "fields": {
+      "expression": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "as_expr",
+            "named": true
+          },
+          {
+            "type": "binary_expr",
+            "named": true
+          },
+          {
+            "type": "comparison_expr",
+            "named": true
+          },
+          {
+            "type": "logic_expr",
+            "named": true
+          },
+          {
+            "type": "primary_expr",
+            "named": true
+          }
+        ]
+      },
+      "format_spec": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "format_spec",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1542,6 +1589,7 @@
   {
     "type": "module",
     "named": true,
+    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
@@ -1823,6 +1871,16 @@
     "type": "rule_stmt",
     "named": true,
     "fields": {
+      "base": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
       "body": {
         "multiple": false,
         "required": true,
@@ -1846,7 +1904,7 @@
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "parameter",
             "named": true
           }
         ]
@@ -2092,6 +2150,10 @@
       "required": true,
       "types": [
         {
+          "type": "interpolation",
+          "named": true
+        },
+        {
           "type": "string_content",
           "named": true
         },
@@ -2114,10 +2176,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "escape_interpolation",
-          "named": true
-        },
         {
           "type": "escape_sequence",
           "named": true
@@ -2384,6 +2442,10 @@
     "named": false
   },
   {
+    "type": "${",
+    "named": false
+  },
+  {
     "type": "%",
     "named": false
   },
@@ -2532,46 +2594,6 @@
     "named": false
   },
   {
-    "type": "G",
-    "named": false
-  },
-  {
-    "type": "Gi",
-    "named": false
-  },
-  {
-    "type": "K",
-    "named": false
-  },
-  {
-    "type": "Ki",
-    "named": false
-  },
-  {
-    "type": "M",
-    "named": false
-  },
-  {
-    "type": "Mi",
-    "named": false
-  },
-  {
-    "type": "P",
-    "named": false
-  },
-  {
-    "type": "Pi",
-    "named": false
-  },
-  {
-    "type": "T",
-    "named": false
-  },
-  {
-    "type": "Ti",
-    "named": false
-  },
-  {
     "type": "[",
     "named": false
   },
@@ -2632,10 +2654,6 @@
     "named": false
   },
   {
-    "type": "escape_interpolation",
-    "named": true
-  },
-  {
     "type": "escape_sequence",
     "named": true
   },
@@ -2649,11 +2667,11 @@
   },
   {
     "type": "float",
-    "named": true
+    "named": false
   },
   {
     "type": "float",
-    "named": false
+    "named": true
   },
   {
     "type": "for",
@@ -2692,10 +2710,6 @@
     "named": false
   },
   {
-    "type": "k",
-    "named": false
-  },
-  {
     "type": "lambda",
     "named": false
   },
@@ -2704,19 +2718,11 @@
     "named": true
   },
   {
-    "type": "m",
-    "named": false
-  },
-  {
     "type": "map",
     "named": false
   },
   {
     "type": "mixin",
-    "named": false
-  },
-  {
-    "type": "n",
     "named": false
   },
   {
@@ -2744,10 +2750,6 @@
     "named": false
   },
   {
-    "type": "raw_string_start",
-    "named": true
-  },
-  {
     "type": "rule",
     "named": false
   },
@@ -2773,10 +2775,6 @@
   },
   {
     "type": "type",
-    "named": false
-  },
-  {
-    "type": "u",
     "named": false
   },
   {

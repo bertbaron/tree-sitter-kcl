@@ -13,3 +13,10 @@
     #   ^ operator
     #       ^ variable
 }
+
+"Value: ${1+2: #yaml}!"
+# <- string
+#       ^ punctuation.special
+#          ^ operator
+#                   ^ punctuation.special
+#                    ^ string

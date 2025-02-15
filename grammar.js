@@ -178,7 +178,7 @@ module.exports = grammar({
     $._dedent,
     $.string_start,
     $._string_content,
-    $.escape_interpolation,
+    '${',
     $.string_end,
 
     // Mark comments as external tokens so that the external scanner is always
@@ -296,7 +296,8 @@ module.exports = grammar({
       field('name', $.parameter),
       optional(seq(
         '(',
-        field('base', $.identifier),
+        commaSep1(field('base', $.identifier)),
+        optional(','),
         ')'
       )),
       optional(seq(
@@ -471,17 +472,6 @@ module.exports = grammar({
     protocol_stmt: $ => seq(
       'protocol',
       field('name', $.identifier),
-      ':',
-      field('body', $._suite),
-    ),
-
-    rule_stmt: $ => seq(
-      'rule',
-      field('name', $.identifier),
-      optional(seq(
-        'for',
-        field('protocol', $.identifier),
-      )),
       ':',
       field('body', $._suite),
     ),
@@ -945,19 +935,28 @@ module.exports = grammar({
 
     string: $ => seq(
       $.string_start,
-      repeat($.string_content),
+     repeat(choice($.interpolation, $.string_content)),
       $.string_end,
     ),
 
     string_content: $ => prec.right(repeat1(
       choice(
-        $.escape_interpolation,
         $.escape_sequence,
         $._not_escape_sequence,
         $._string_content,
       ))),
 
-    escape_interpolation: _ => token.immediate(/\$\{[^}]*\}/),
+    interpolation: $ => seq(
+      '${',
+      field('expression', $._simple_expr),
+      optional(field("format_spec", $.format_spec)),
+      '}',
+    ),
+
+    format_spec: $ => seq(
+      ':',
+      token(prec(1, /[^}\n]+/)),
+    ),
 
     escape_sequence: _ => token.immediate(prec(1, seq(
       '\\',
@@ -968,13 +967,12 @@ module.exports = grammar({
         /\d{3}/,
         /\r?\n/,
         /['"abfrntv\\]/,
-        /N\{[^}]+\}/,
+        /N\{[^}]+}/,
+        /\$/,
       ),
     ))),
 
     _not_escape_sequence: _ => token.immediate('\\'),
-
-    _string_content: _ => token.immediate(/[^\\{}]+/),
 
     integer: $ => token(choice(
       seq(
